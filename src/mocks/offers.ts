@@ -1,8 +1,8 @@
-import {Offers} from '../types/offer';
+import {Offer} from '../types/offer';
 
 const AVATAR_URL = 'https://i.pravatar.cc/128';
 
-export const offers: Offers = [
+export const offers: Offer[] = [
   {
     'bedrooms': 3,
     'city': {
@@ -44,7 +44,7 @@ export const offers: Offers = [
     },
     'maxAdults': 4,
     'previewImage': 'img/apartment-01.jpg',
-    'price': 120,
+    'price': 140,
     'rating': 4.5,
     'title': 'Beautiful & luxurious studio at great location',
     'type': 'apartment'
@@ -89,8 +89,8 @@ export const offers: Offers = [
       'zoom': 8
     },
     'maxAdults': 4,
-    'previewImage': 'img/apartment-01.jpg',
-    'price': 120,
+    'previewImage': 'img/apartment-02.jpg',
+    'price': 80,
     'rating': 3,
     'title': 'Beautiful & luxurious studio at great location',
     'type': 'apartment'
@@ -132,7 +132,7 @@ export const offers: Offers = [
       'zoom': 8
     },
     'maxAdults': 4,
-    'previewImage': 'img/apartment-01.jpg',
+    'previewImage': 'img/apartment-03.jpg',
     'price': 120,
     'rating': 4.8,
     'title': 'Beautiful & luxurious studio at great location',
@@ -175,8 +175,8 @@ export const offers: Offers = [
       'zoom': 8
     },
     'maxAdults': 4,
-    'previewImage': 'img/apartment-01.jpg',
-    'price': 120,
+    'previewImage': 'img/room.jpg',
+    'price': 150,
     'rating': 4.8,
     'title': 'Beautiful & luxurious studio at great location',
     'type': 'apartment'

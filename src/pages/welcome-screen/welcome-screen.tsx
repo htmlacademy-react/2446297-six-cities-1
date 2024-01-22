@@ -1,14 +1,18 @@
-import OfferList from '../../components/offers-list/offers-list';
-import {Offers} from '../../types/offer';
+import OffersList from '../../components/offers-list/offers-list';
+import {Offer} from '../../types/offer';
 import {Link} from 'react-router-dom';
 import { AppRoute } from '../../const';
 
 type WelcomeScreenProps = {
-    offersCount: number;
-    offers: Offers;
+    offers: Offer[];
 }
 
-function WelcomeScreen({offersCount, offers}: WelcomeScreenProps): JSX.Element {
+function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
+  const classes = {
+    article: 'cities__card',
+    img: 'cities__image-wrapper',
+    info: ''
+  };
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -89,7 +93,7 @@ function WelcomeScreen({offersCount, offers}: WelcomeScreenProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -116,7 +120,7 @@ function WelcomeScreen({offersCount, offers}: WelcomeScreenProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <OfferList offers={ offers }/>
+              <OffersList offers={ offers } className={classes}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>

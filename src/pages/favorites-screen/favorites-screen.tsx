@@ -1,25 +1,29 @@
-import {Offers} from '../../types/offer';
+import {Offer} from '../../types/offer';
 import {Link} from 'react-router-dom';
 import { AppRoute } from '../../const';
-import capitalizeFirstLetter from '../../helper-functions';
+import OffersList from '../../components/offers-list/offers-list';
 
 type FavoritesScreenProps = {
-  offers: Offers;
+  offers: Offer[];
 }
 
 function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
-  function getUniqueCities(arr: Offers) {
-    const result: string[] = [];
+  function getUniqueCities(arr: Offer[]) {
+    const result: Set<string> = new Set();
     for (const str of arr) {
-      if (!result.includes(str.city.name)) {
-        result.push(str.city.name);
-      }
+      result.add(str.city.name);
     }
     return result;
   }
 
   const uniqueCities = getUniqueCities(offers);
-
+  const classes = {
+    article: 'favorites__card',
+    img: 'favorites__image-wrapper',
+    info: 'favorites__card-info',
+    imgHeight: '150',
+    imgWidth: '110'
+  };
   return (
     <div className="page">
       <header className="header">
@@ -56,7 +60,7 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {uniqueCities.map((city, id) => {
+              {Array.from(uniqueCities).map((city, id) => {
                 const keyValue = `${id}-${city}`;
                 const filtredOffers = offers.filter((offer) => offer.city.name === city);
                 return (
@@ -69,51 +73,7 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
                       </div>
                     </div>
                     <div className="favorites__places">
-                      {filtredOffers.map((offer, idOffer) => {
-                        const keyOfferValue = `${idOffer}-${offer.previewImage}`;
-                        const { isPremium, price, title, type, previewImage, rating } = offer;
-
-                        return (
-                          <article className="favorites__card place-card" key={keyOfferValue}>
-                            {isPremium ?
-                              <div className="place-card__mark">
-                                <span>Premium</span>
-                              </div>
-                              : null}
-                            <div className="favorites__image-wrapper place-card__image-wrapper">
-                              <a href="#">
-                                <img className="place-card__image" src={previewImage} width="150" height="110" alt="Place image" />
-                              </a>
-                            </div>
-                            <div className="favorites__card-info place-card__info">
-                              <div className="place-card__price-wrapper">
-                                <div className="place-card__price">
-                                  <b className="place-card__price-value">&euro;{price}</b>
-                                  <span className="place-card__price-text">&#47;&nbsp;night</span>
-                                </div>
-                                <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-                                  <svg className="place-card__bookmark-icon" width="18" height="19">
-                                    <use xlinkHref="#icon-bookmark"></use>
-                                  </svg>
-                                  <span className="visually-hidden">In bookmarks</span>
-                                </button>
-                              </div>
-                              <div className="place-card__rating rating">
-                                <div className="place-card__stars rating__stars">
-                                  <span style={{ width: `${rating * 20}%` }}></span>
-                                  <span className="visually-hidden">Rating</span>
-                                </div>
-                              </div>
-                              <h2 className="place-card__name">
-                                <Link to={`/offer/${offer.id}`}>
-                                  {title}
-                                </Link>
-                              </h2>
-                              <p className="place-card__type">{capitalizeFirstLetter(type)}</p>
-                            </div>
-                          </article>
-                        );
-                      })}
+                      <OffersList offers={ filtredOffers } className={classes} />
                     </div>
                   </li>
                 );

@@ -1,8 +1,8 @@
-import {Feedbacks} from '../types/offer';
+import {Feedback} from '../types/offer';
 
 const AVATAR_URL = 'https://i.pravatar.cc/128';
 
-export const feedbacks: Feedbacks = [{
+export const feedbacks: Feedback[] = [{
   'comment': 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
   'date': 'Sat Jan 20 2024 00:58:40 GMT+0400 (GMT+04:00)',
   'id': 1,

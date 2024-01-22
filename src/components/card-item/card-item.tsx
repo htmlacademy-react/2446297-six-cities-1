@@ -4,22 +4,28 @@ import capitalizeFirstLetter from '../../helper-functions';
 
 type CardItemProps = {
   offer: Offer;
-  onMouseOver: (evt: React.MouseEvent<HTMLInputElement>) => void;
+  onMouseOver?: (evt: React.MouseEvent<HTMLInputElement>) => void;
+  className: {
+    article: string;
+    img: string;
+    info: string;
+    imgHeight?: string;
+    imgWidth?: string;
+  };
 };
 
 function CardItem(props: CardItemProps): JSX.Element {
-  const { offer, onMouseOver} = props;
+  const { offer, onMouseOver, className} = props;
   const { isPremium, price, title, type, previewImage, rating, id } = offer;
-
   return (
-    <article className="cities__card place-card" onMouseOver={onMouseOver}>
+    <article className={`${className.article} place-card`} onMouseOver={onMouseOver}>
       {isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
         : null}
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+      <div className={`${className.img} place-card__image-wrapper`}>
+        <Link to={`/offer/${id}`}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -27,9 +33,9 @@ function CardItem(props: CardItemProps): JSX.Element {
             height="200"
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
-      <div className="place-card__info">
+      <div className={`${className.img} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -49,7 +55,7 @@ function CardItem(props: CardItemProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`offer/${id}`}>
+          <Link to={`/offer/${id}`}>
             {title}
           </Link>
         </h2>

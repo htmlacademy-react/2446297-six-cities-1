@@ -45,6 +45,3 @@ export type Offer = {
   previewImage: string;
   title: string;
 }
-
-export type Offers = Offer[];
-export type Feedbacks = Feedback[];
