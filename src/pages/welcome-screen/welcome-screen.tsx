@@ -1,17 +1,36 @@
-import CardItem from '../../components/card-item/card-item';
+import OffersList from '../../components/offers-list/offers-list';
+import {Offer} from '../../types/offer';
+import {Link} from 'react-router-dom';
+import { AppRoute } from '../../const';
+import { useState } from 'react';
 
 type WelcomeScreenProps = {
-    offersCount: number;
+    offers: Offer[];
 }
 
-function WelcomeScreen({offersCount}: WelcomeScreenProps): JSX.Element {
+function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
+  const classes = {
+    article: 'cities__card',
+    img: 'cities__image-wrapper',
+    info: ''
+  };
+
+  const [activeCard, setActiveCard] = useState({
+    card: 0,
+  });
+
+  const hoverCardHandle = (offer: Offer) => {
+    const {id} = offer;
+    setActiveCard({ ...activeCard, card: id });
+  };
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
+              <Link className="header__logo-link" to={AppRoute.Main}>
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -19,21 +38,18 @@ function WelcomeScreen({offersCount}: WelcomeScreenProps): JSX.Element {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
-                    className="header__nav-link header__nav-link--profile"
-                    href="#"
-                  >
+                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
                       Oliver.conner@gmail.com
                     </span>
                     <span className="header__favorite-count">3</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
                   <a className="header__nav-link" href="#">
@@ -88,7 +104,7 @@ function WelcomeScreen({offersCount}: WelcomeScreenProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -115,13 +131,7 @@ function WelcomeScreen({offersCount}: WelcomeScreenProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <CardItem />
-                <CardItem />
-                <CardItem />
-                <CardItem />
-                <CardItem />
-              </div>
+              <OffersList offers={ offers } className={classes} onMouseOver={(offer) => hoverCardHandle(offer)}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
