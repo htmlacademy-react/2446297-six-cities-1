@@ -4,7 +4,7 @@ import capitalizeFirstLetter from '../../helper-functions';
 
 type CardItemProps = {
   offer: Offer;
-  onMouseOver?: (evt: React.MouseEvent<HTMLInputElement>) => void;
+  onMouseOver?: (offerId: Offer) => void;
   className: {
     article: string;
     img: string;
@@ -18,7 +18,7 @@ function CardItem(props: CardItemProps): JSX.Element {
   const { offer, onMouseOver, className} = props;
   const { isPremium, price, title, type, previewImage, rating, id } = offer;
   return (
-    <article className={`${className.article} place-card`} onMouseOver={onMouseOver}>
+    <article className={`${className.article} place-card`} onMouseOver={() => onMouseOver && onMouseOver(offer)}>
       {isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>

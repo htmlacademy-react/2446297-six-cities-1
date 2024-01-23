@@ -1,6 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { Offer, Feedback } from '../../types/offer';
-import { Link, Navigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
@@ -17,14 +16,17 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
     img: 'near-places__image-wrapper',
     info: ''
   };
+
   const { id } = useParams();
   if (!id) {
     return <Navigate to="/404" replace />;
   }
+
   const offer = offers.find((item) => item.id === +id);
   if (!offer) {
     return <Navigate to="/404" replace />;
   }
+
   const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type} = offer;
   return (
     <div className="page">

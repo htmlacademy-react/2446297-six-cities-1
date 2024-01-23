@@ -24,6 +24,7 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
     imgHeight: '150',
     imgWidth: '110'
   };
+
   return (
     <div className="page">
       <header className="header">

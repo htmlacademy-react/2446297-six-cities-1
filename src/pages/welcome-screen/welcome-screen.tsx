@@ -2,6 +2,7 @@ import OffersList from '../../components/offers-list/offers-list';
 import {Offer} from '../../types/offer';
 import {Link} from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useState } from 'react';
 
 type WelcomeScreenProps = {
     offers: Offer[];
@@ -13,6 +14,16 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
     img: 'cities__image-wrapper',
     info: ''
   };
+
+  const [activeCard, setActiveCard] = useState({
+    card: 0,
+  });
+
+  const hoverCardHandle = (offer: Offer) => {
+    const {id} = offer;
+    setActiveCard({ ...activeCard, card: id });
+  };
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -120,7 +131,7 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <OffersList offers={ offers } className={classes}/>
+              <OffersList offers={ offers } className={classes} onMouseOver={(offer) => hoverCardHandle(offer)}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
