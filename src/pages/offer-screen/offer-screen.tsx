@@ -14,7 +14,8 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
   const classes = {
     article: 'near-places__card',
     img: 'near-places__image-wrapper',
-    info: ''
+    info: '',
+    isPremiumBlockShow: false
   };
 
   const { id } = useParams();

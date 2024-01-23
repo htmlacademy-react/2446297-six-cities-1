@@ -22,7 +22,8 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
     img: 'favorites__image-wrapper',
     info: 'favorites__card-info',
     imgHeight: '150',
-    imgWidth: '110'
+    imgWidth: '110',
+    isPremiumBlockShow: false
   };
 
   return (

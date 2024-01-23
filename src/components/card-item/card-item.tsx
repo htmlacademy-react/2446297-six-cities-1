@@ -11,6 +11,7 @@ type CardItemProps = {
     info: string;
     imgHeight?: string;
     imgWidth?: string;
+    isPremiumBlockShow?: boolean;
   };
 };
 
@@ -19,7 +20,7 @@ function CardItem(props: CardItemProps): JSX.Element {
   const { isPremium, price, title, type, previewImage, rating, id } = offer;
   return (
     <article className={`${className.article} place-card`} onMouseOver={() => onMouseOver && onMouseOver(offer)}>
-      {isPremium ?
+      {isPremium && (className.isPremiumBlockShow === undefined || className.isPremiumBlockShow) ?
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
