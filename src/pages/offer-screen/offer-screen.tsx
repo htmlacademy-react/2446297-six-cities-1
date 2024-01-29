@@ -4,10 +4,17 @@ import { AppRoute } from '../../const';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
 import OffersList from '../../components/offers-list/offers-list';
+import Map from '../../components/map/map';
 
 type OfferScreenProps = {
   offers: Offer[];
   feedbacks: Feedback[];
+}
+
+type PointType = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
 }
 
 function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
@@ -28,7 +35,19 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
     return <Navigate to="/404" replace />;
   }
 
-  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type} = offer;
+  const nearestRooms = offers.filter((room) => room.id !== +id);
+
+  function getNearestPoints(arr: Offer[]) {
+    const result: Set<PointType> = new Set();
+    for (const point of arr) {
+      result.add(point.location);
+    }
+    return result;
+  }
+
+  const nearestPoints = getNearestPoints(offers);
+
+  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
   return (
     <div className="page">
       <header className="header">
@@ -162,7 +181,12 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
               <Feedbacks feedbacks={feedbacks}/>
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <Map city={city}
+            points={Array.from(nearestPoints)}
+            selectedPoint={location}
+            className="offer__map"
+            mapHeight='579px'
+          />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -170,7 +194,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
                   Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <OffersList offers={ offers.slice(0, 3) } className={classes}/>
+              <OffersList offers={ nearestRooms.slice(0, 3) } className={classes}/>
             </div>
           </section>
         </div>

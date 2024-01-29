@@ -156,6 +156,7 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
               <Map city={offers[0].city}
                 points={Array.from(points)}
                 selectedPoint={activeCard}
+                className="cities__map"
               />
             </div>
           </div>

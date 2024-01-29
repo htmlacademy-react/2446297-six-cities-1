@@ -31,9 +31,11 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({city, points, selectedPoint}: { city: CityType; points: PointType[]; selectedPoint: PointType }): JSX.Element {
+function Map({city, points, selectedPoint, className, mapHeight}: { city: CityType; points: PointType[]; selectedPoint: PointType; className:string; mapHeight?:string}): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+
+  const height = mapHeight ? mapHeight : '100%';
 
   useEffect(() => {
     if (map) {
@@ -52,8 +54,8 @@ function Map({city, points, selectedPoint}: { city: CityType; points: PointType[
   }, [map, points, selectedPoint]);
 
   return (
-    <section className="cities__map map"
-      style={{height: '100%'}}
+    <section className={`${className} map`}
+      style={{height: height}}
       ref={mapRef}
     >
     </section>
