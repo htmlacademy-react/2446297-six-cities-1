@@ -3,9 +3,16 @@ import {Offer} from '../../types/offer';
 import {Link} from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useState } from 'react';
+import Map from '../../components/map/map';
 
 type WelcomeScreenProps = {
     offers: Offer[];
+}
+
+type PointType = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
 }
 
 function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
@@ -23,6 +30,16 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
     const {id} = offer;
     setActiveCard({ ...activeCard, card: id });
   };
+
+  function getMapPoints(arr: Offer[]) {
+    const result: Set<PointType> = new Set();
+    for (const point of arr) {
+      result.add(point.location);
+    }
+    return result;
+  }
+
+  const points = getMapPoints(offers);
 
   return (
     <div className="page page--gray page--main">
@@ -134,7 +151,9 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
               <OffersList offers={ offers } className={classes} onMouseOver={(offer) => hoverCardHandle(offer)}/>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map city={offers[0].city}
+                points={Array.from(points)}
+              />
             </div>
           </div>
         </div>
