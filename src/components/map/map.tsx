@@ -2,7 +2,7 @@ import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect } from 'react';
 import useMap from '../../hooks/useMap';
-import { URL_MARKER_DEFAULT } from '../../const';
+import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 
 type CityType = {
   location: {
@@ -25,15 +25,15 @@ const defaultCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({city, points}: { city: CityType; points: PointType[] }): JSX.Element {
+const currentCustomIcon = leaflet.icon({
+  iconUrl: URL_MARKER_CURRENT,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+function Map({city, points, selectedPoint}: { city: CityType; points: PointType[]; selectedPoint: PointType }): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
-
-  //const currentCustomIcon = leaflet.icon({
-  //  iconUrl: URL_MARKER_CURRENT,
-  //  iconSize: [40, 40],
-  //  iconAnchor: [20, 40],
-  //});
 
   useEffect(() => {
     if (map) {
@@ -42,12 +42,14 @@ function Map({city, points}: { city: CityType; points: PointType[] }): JSX.Eleme
           lat: point.latitude,
           lng: point.longitude,
         },{
-          icon: defaultCustomIcon,
+          icon: (point.latitude === selectedPoint.latitude && point.longitude === selectedPoint.longitude)
+            ? currentCustomIcon
+            : defaultCustomIcon,
         })
           .addTo(map);
       });
     }
-  }, [map, points]);
+  }, [map, points, selectedPoint]);
 
   return (
     <section className="cities__map map"

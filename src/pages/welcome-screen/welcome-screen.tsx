@@ -23,12 +23,14 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
   };
 
   const [activeCard, setActiveCard] = useState({
-    card: 0,
+    latitude: 0,
+    longitude: 0,
+    zoom: 10,
   });
 
   const hoverCardHandle = (offer: Offer) => {
-    const {id} = offer;
-    setActiveCard({ ...activeCard, card: id });
+    const {location} = offer;
+    setActiveCard(location);
   };
 
   function getMapPoints(arr: Offer[]) {
@@ -153,6 +155,7 @@ function WelcomeScreen({offers}: WelcomeScreenProps): JSX.Element {
             <div className="cities__right-section">
               <Map city={offers[0].city}
                 points={Array.from(points)}
+                selectedPoint={activeCard}
               />
             </div>
           </div>
