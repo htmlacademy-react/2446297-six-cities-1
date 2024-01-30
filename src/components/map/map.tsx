@@ -21,13 +21,13 @@ type PointType = {
 
 const defaultCustomIcon = leaflet.icon({
   iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
+  iconSize: [27, 39],
   iconAnchor: [20, 40],
 });
 
 const currentCustomIcon = leaflet.icon({
   iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
+  iconSize: [27, 39],
   iconAnchor: [20, 40],
 });
 
@@ -50,6 +50,14 @@ function Map({city, points, selectedPoint, className, mapHeight}: { city: CityTy
         })
           .addTo(map);
       });
+
+      return () => {
+        map.eachLayer((layer) => {
+          if (layer instanceof leaflet.Marker) {
+            layer.remove();
+          }
+        });
+      };
     }
   }, [map, points, selectedPoint]);
 
