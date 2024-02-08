@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, getOffersList} from './action';
+import {changeCity, getOffersList, sortOffersList} from './action';
 import { Offer, City } from '../types/offer';
 import { offers } from '../mocks/offers';
 
@@ -22,7 +22,11 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(getOffersList, (state, action) => {
       state.offersList = state.offers.filter((offer) => offer.city.name === action.payload.name);
+    })
+    .addCase(sortOffersList, (state, action) => {
+      state.offersList = action.payload;
     });
+
 });
 
 export {reducer};
