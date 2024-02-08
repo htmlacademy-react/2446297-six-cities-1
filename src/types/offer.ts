@@ -45,3 +45,12 @@ export type Offer = {
   previewImage: string;
   title: string;
 }
+
+export type City = {
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+  name: string;
+};

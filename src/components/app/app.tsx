@@ -6,20 +6,22 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import OfferScreen from '../../pages/offer-screen/offer-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 //import PrivateRoute from '../private-route';
-import { Offer, Feedback } from '../../types/offer';
+import { Feedback } from '../../types/offer';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 type AppScreenProps = {
-  offers: Offer[];
   feedbacks: Feedback[];
 };
 
-function App({ offers, feedbacks }: AppScreenProps): JSX.Element {
+function App({ feedbacks }: AppScreenProps): JSX.Element {
+  const offers = useAppSelector((state) => state.offersList);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<WelcomeScreen offers={offers} />}
+          element={<WelcomeScreen />}
         />
         <Route path={AppRoute.Login} element={<LoginScreen />} />
         <Route

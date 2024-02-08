@@ -3,15 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect } from 'react';
 import useMap from '../../hooks/useMap';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
-
-type CityType = {
-  location: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
-  name: string;
-};
+import { City } from '../../types/offer';
 
 type PointType = {
   latitude: number;
@@ -31,10 +23,9 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({city, points, selectedPoint, className, mapHeight}: { city: CityType; points: PointType[]; selectedPoint: PointType; className:string; mapHeight?:string}): JSX.Element {
+function Map({city, points, selectedPoint, className, mapHeight}: { city: City; points: PointType[]; selectedPoint: PointType; className:string; mapHeight?:string}): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
-
   const height = mapHeight ? mapHeight : '100%';
 
   useEffect(() => {

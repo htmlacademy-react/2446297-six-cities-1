@@ -11,12 +11,6 @@ type OfferScreenProps = {
   feedbacks: Feedback[];
 }
 
-type PointType = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
-
 function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
   const classes = {
     article: 'near-places__card',
@@ -36,18 +30,9 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
   }
 
   const nearestRooms = offers.filter((room) => room.id !== +id);
-
-  function getNearestPoints(arr: Offer[]) {
-    const result: Set<PointType> = new Set();
-    for (const point of arr) {
-      result.add(point.location);
-    }
-    return result;
-  }
-
-  const nearestPoints = getNearestPoints(offers);
-
+  const nearestPoints = offers.map((offerItem) => offerItem.location);
   const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
+
   return (
     <div className="page">
       <header className="header">
@@ -182,7 +167,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
             </div>
           </div>
           <Map city={city}
-            points={Array.from(nearestPoints)}
+            points={nearestPoints}
             selectedPoint={location}
             className="offer__map"
             mapHeight='579px'
