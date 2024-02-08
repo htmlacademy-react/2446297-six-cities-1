@@ -45,5 +45,4 @@ function SortingOptions({sortingOption, onOptionChange}: SortingOptionsProps): J
   );
 }
 
-
 export default SortingOptions;
