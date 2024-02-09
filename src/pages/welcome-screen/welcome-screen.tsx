@@ -7,7 +7,7 @@ import Map from '../../components/map/map';
 import CitiesList from '../../components/cities-list/cities-list';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { changeCity, getOffersList, sortOffersList } from '../../store/action';
+import { changeCity, setOffersList, setSortedOffersList } from '../../store/action';
 import { CITIES } from '../../const';
 import SortingOptions from '../../components/sorting-options/sorting-options';
 
@@ -20,7 +20,7 @@ function WelcomeScreen(): JSX.Element {
 
   useEffect(()=> {
     dispatch(changeCity(CITIES[0]));
-    dispatch(getOffersList(CITIES[0]));
+    dispatch(setOffersList(CITIES[0]));
   }, []);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function WelcomeScreen(): JSX.Element {
     zoom: 10,
   });
 
-  const hoverCardHandle = (offer: Offer) => {
+  const cardHoverHandler = (offer: Offer) => {
     const {location} = offer;
     setActiveCard(location);
   };
@@ -61,12 +61,12 @@ function WelcomeScreen(): JSX.Element {
         break;
       default:
         if (city) {
-          dispatch(getOffersList(city));
+          dispatch(setOffersList(city));
         }
         break;
     }
     if (option !== 'Popular') {
-      dispatch(sortOffersList(sortedOffersList));
+      dispatch(setSortedOffersList(sortedOffersList));
     }
   };
 
@@ -115,10 +115,11 @@ function WelcomeScreen(): JSX.Element {
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{offers.length} places to stay in {city && city.name}</b>
               <SortingOptions
+                city={city}
                 sortingOption = {sortingOption}
                 onOptionChange={sortOptionChangeHandle}
               />
-              <OffersList offers={ offers } className={classes} onMouseOver={(offer) => hoverCardHandle(offer)}/>
+              <OffersList offers={ offers } className={classes} onMouseOver={(offer) => cardHoverHandler(offer)}/>
             </section>
             <div className="cities__right-section">
               {city &&
