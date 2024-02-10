@@ -1,7 +1,7 @@
 import { CITIES } from '../../const';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { changeCity } from '../../store/action';
-import { getOffersList } from '../../store/action';
+import { setOffersList } from '../../store/action';
 import { City } from '../../types/offer';
 
 type CityListProps = {
@@ -24,7 +24,7 @@ function CitiesList({ activeCity }: CityListProps): JSX.Element {
                   key={keyValue}
                   onClick={() => {
                     dispatch(changeCity(city));
-                    dispatch(getOffersList(city));
+                    dispatch(setOffersList(city));
                   }}
                 >
                   <a className={`locations__item-link tabs__item ${ activeCity === city ? 'tabs__item--active' : ''}`}>

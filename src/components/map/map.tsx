@@ -11,6 +11,14 @@ type PointType = {
   zoom: number;
 };
 
+type MapProps = {
+  city: City;
+  points: PointType[];
+  selectedPoint: PointType;
+  className:string;
+  mapHeight?:string;
+};
+
 const defaultCustomIcon = leaflet.icon({
   iconUrl: URL_MARKER_DEFAULT,
   iconSize: [27, 39],
@@ -23,7 +31,7 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({city, points, selectedPoint, className, mapHeight}: { city: City; points: PointType[]; selectedPoint: PointType; className:string; mapHeight?:string}): JSX.Element {
+function Map({city, points, selectedPoint, className, mapHeight}: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   const height = mapHeight ? mapHeight : '100%';

@@ -7,6 +7,8 @@ export enum AppRoute {
   Room = '/offer/:id'
 }
 
+export const SortOptions = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
+
 export const CITIES: City[] = [
   {
     location: {

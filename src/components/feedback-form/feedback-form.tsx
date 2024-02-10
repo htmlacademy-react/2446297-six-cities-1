@@ -6,7 +6,7 @@ function FeedbackForm(): JSX.Element {
     review: '',
   });
 
-  const fieldChangeHandle = (evt: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const fieldChangeHandler = (evt: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const {name, value} = evt.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -22,7 +22,7 @@ function FeedbackForm(): JSX.Element {
           name="rating"
           value="5"
           id="5-stars"
-          onChange={fieldChangeHandle}
+          onChange={fieldChangeHandler}
           type="radio"
         />
         <label
@@ -40,7 +40,7 @@ function FeedbackForm(): JSX.Element {
           name="rating"
           value="4"
           id="4-stars"
-          onChange={fieldChangeHandle}
+          onChange={fieldChangeHandler}
           type="radio"
         />
         <label
@@ -58,7 +58,7 @@ function FeedbackForm(): JSX.Element {
           name="rating"
           value="3"
           id="3-stars"
-          onChange={fieldChangeHandle}
+          onChange={fieldChangeHandler}
           type="radio"
         />
         <label
@@ -76,7 +76,7 @@ function FeedbackForm(): JSX.Element {
           name="rating"
           value="2"
           id="2-stars"
-          onChange={fieldChangeHandle}
+          onChange={fieldChangeHandler}
           type="radio"
         />
         <label
@@ -94,7 +94,7 @@ function FeedbackForm(): JSX.Element {
           name="rating"
           value="1"
           id="1-star"
-          onChange={fieldChangeHandle}
+          onChange={fieldChangeHandler}
           type="radio"
         />
         <label
@@ -112,7 +112,7 @@ function FeedbackForm(): JSX.Element {
         id="review"
         value={formData.review}
         name="review"
-        onChange={fieldChangeHandle}
+        onChange={fieldChangeHandler}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
