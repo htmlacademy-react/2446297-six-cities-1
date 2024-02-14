@@ -12,3 +12,9 @@ export const setOffersList = createAction('offers/setOffersList', (value: City) 
 export const setSortedOffersList = createAction('offers/setSortedOffersList', (value: Offer[]) => ({
   payload: value,
 }));
+
+export const loadOffers = createAction<Offer[]>('data/loadOffers');
+
+export const setError = createAction<string | null>('data/setError');
+
+export const setOffersDataLoadingStatus = createAction<boolean>('data/setOffersDataLoadingStatus');
