@@ -8,6 +8,7 @@ import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 //import PrivateRoute from '../private-route';
 import { Feedback } from '../../types/offer';
 import { useAppSelector } from '../../hooks/useAppSelector';
+import Spinner from '../spinner/spinner';
 
 type AppScreenProps = {
   feedbacks: Feedback[];
@@ -15,6 +16,13 @@ type AppScreenProps = {
 
 function App({ feedbacks }: AppScreenProps): JSX.Element {
   const offers = useAppSelector((state) => state.offersList);
+  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+
+  if (isOffersDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
 
   return (
     <BrowserRouter>

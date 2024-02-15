@@ -7,6 +7,10 @@ export enum AppRoute {
   Room = '/offer/:id'
 }
 
+export enum APIRoute {
+  Offers = '/hotels',
+}
+
 export const SortOptions = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
 export const CITIES: City[] = [
@@ -63,3 +67,5 @@ export const CITIES: City[] = [
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
 
 export const URL_MARKER_CURRENT = 'img/pin-active.svg';
+
+export const TIMEOUT_SHOW_ERROR = 2000;
