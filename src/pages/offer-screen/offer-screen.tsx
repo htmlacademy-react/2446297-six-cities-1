@@ -1,10 +1,14 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { Offer, Feedback } from '../../types/offer';
-import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { fetchRoomAction } from '../../store/api-actions';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
+import Header from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import Map from '../../components/map/map';
+import { store } from '../../store';
 
 type OfferScreenProps = {
   offers: Offer[];
@@ -12,6 +16,9 @@ type OfferScreenProps = {
 }
 
 function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  let offer = useAppSelector((state) => state.room);
+  const user = useAppSelector((state) => state.user);
   const classes = {
     article: 'near-places__card',
     img: 'near-places__image-wrapper',
@@ -24,7 +31,11 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
     return <Navigate to="/404" replace />;
   }
 
-  const offer = offers.find((item) => item.id === +id);
+  store.dispatch(fetchRoomAction({ hotelId: +id }));
+  offer = useAppSelector((state) => state.room);
+  //const offer = offers.find((item) => item.id === +id);
+  
+
   if (!offer) {
     return <Navigate to="/404" replace />;
   }
@@ -35,41 +46,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to={AppRoute.Main}>
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width="81"
-                  height="41"
-                />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                          Oliver.conner@gmail.com
-                    </span>
-                    <span className="header__favorite-count">3</span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header authorizationStatus={authorizationStatus} user={user}/>
 
       <main className="page__main page__main--offer">
         <section className="offer">

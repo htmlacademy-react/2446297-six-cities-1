@@ -17,6 +17,8 @@ export const setSortedOffersList = createAction('offers/setSortedOffersList', (v
 
 export const loadOffers = createAction<Offer[]>('data/loadOffers');
 
+export const loadRoom = createAction<Offer>('data/loadRoom');
+
 export const setOffersDataLoadingStatus = createAction<boolean>('data/setOffersDataLoadingStatus');
 
 export const requireAuthorization = createAction<AuthorizationStatus>('user/requireAuthorization');

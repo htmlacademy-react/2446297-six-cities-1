@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, setOffersList, setSortedOffersList, loadOffers, setOffersDataLoadingStatus, requireAuthorization, setUserInfo} from './action';
+import {changeCity, setOffersList, setSortedOffersList, loadOffers, setOffersDataLoadingStatus, requireAuthorization, setUserInfo, loadRoom} from './action';
 import { Offer, City } from '../types/offer';
 import { AuthorizationStatus } from '../const';
 import { UserData } from '../types/user-data.js';
@@ -11,6 +11,7 @@ interface State {
   isOffersDataLoading: boolean;
   authorizationStatus: AuthorizationStatus;
   user: UserData | null;
+  room: Offer | null;
 }
 
 const initialState: State = {
@@ -20,6 +21,7 @@ const initialState: State = {
   isOffersDataLoading: false,
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
+  room: null,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -35,6 +37,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
+    })
+    .addCase(loadRoom, (state, action) => {
+      state.room = action.payload;
     })
     .addCase(setOffersDataLoadingStatus, (state, action) => {
       state.isOffersDataLoading = action.payload;

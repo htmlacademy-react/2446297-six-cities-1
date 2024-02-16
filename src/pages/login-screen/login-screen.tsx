@@ -12,6 +12,7 @@ function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const [inputText, setInputText] = useState('');
+
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
