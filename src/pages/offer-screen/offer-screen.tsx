@@ -1,7 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { Offer, Feedback } from '../../types/offer';
 import { useAppSelector } from '../../hooks/useAppSelector';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+//import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { fetchRoomAction } from '../../store/api-actions';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
@@ -17,7 +17,7 @@ type OfferScreenProps = {
 
 function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  let offer = useAppSelector((state) => state.room);
+  //let offer = useAppSelector((state) => state.room);
   const user = useAppSelector((state) => state.user);
   const classes = {
     article: 'near-places__card',
@@ -32,9 +32,8 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
   }
 
   store.dispatch(fetchRoomAction({ hotelId: +id }));
-  offer = useAppSelector((state) => state.room);
-  //const offer = offers.find((item) => item.id === +id);
-  
+  //offer = useAppSelector((state) => state.room);
+  const offer = offers.find((item) => item.id === +id);
 
   if (!offer) {
     return <Navigate to="/404" replace />;
