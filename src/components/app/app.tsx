@@ -6,15 +6,11 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import OfferScreen from '../../pages/offer-screen/offer-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route';
-import { Feedback } from '../../types/offer';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import Spinner from '../spinner/spinner';
 
-type AppScreenProps = {
-  feedbacks: Feedback[];
-};
 
-function App({ feedbacks }: AppScreenProps): JSX.Element {
+function App(): JSX.Element {
   const offers = useAppSelector((state) => state.offersList);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
@@ -41,7 +37,7 @@ function App({ feedbacks }: AppScreenProps): JSX.Element {
             </PrivateRoute>
           }
         />
-        <Route path={AppRoute.Room} element={<OfferScreen offers={offers} feedbacks={feedbacks}/>}/>
+        <Route path={AppRoute.Room} element={<OfferScreen />}/>
         <Route path="*" element={<NotFoundScreen />} />
       </Routes>
     </BrowserRouter>

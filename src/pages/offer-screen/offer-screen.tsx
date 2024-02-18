@@ -1,24 +1,44 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { Offer, Feedback } from '../../types/offer';
+import { useEffect } from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
-//import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { fetchRoomAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { fetchRoomAction, fetchNearByHotelsAction, fetchCommentsAction } from '../../store/api-actions';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
 import Header from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import Map from '../../components/map/map';
-import { store } from '../../store';
+import Spinner from '../../components/spinner/spinner';
 
-type OfferScreenProps = {
-  offers: Offer[];
-  feedbacks: Feedback[];
-}
-
-function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
+function OfferScreen(): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  //let offer = useAppSelector((state) => state.room);
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
+
+  const isRoomDataLoading = useAppSelector((state) => state.isRoomDataLoading);
+  const isNearByHotelsDataLoading = useAppSelector((state) => state.isNearByHotelsDataLoading);
+  const isCommentsDataLoading = useAppSelector((state) => state.isCommentsDataLoading);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchRoomAction({ hotelId: id ? Number(id) : null }));
+      dispatch(fetchNearByHotelsAction({ hotelId: id ? Number(id) : null }));
+      dispatch(fetchCommentsAction({ hotelId: id ? Number(id) : null }));
+    }
+  }, [id]);
+
+  const offer = useAppSelector((state) => state.room);
   const user = useAppSelector((state) => state.user);
+  const nearestRooms = useAppSelector((state) => state.nearByHotels);
+  const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
+  const feedbacks = useAppSelector((state) => state.comments);
+
+  if (isRoomDataLoading || isNearByHotelsDataLoading || isCommentsDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
+
   const classes = {
     article: 'near-places__card',
     img: 'near-places__image-wrapper',
@@ -26,21 +46,19 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
     isPremiumBlockShow: false
   };
 
-  const { id } = useParams();
   if (!id) {
     return <Navigate to="/404" replace />;
   }
 
-  store.dispatch(fetchRoomAction({ hotelId: +id }));
-  //offer = useAppSelector((state) => state.room);
-  const offer = offers.find((item) => item.id === +id);
+  if (!offer && !isRoomDataLoading) {
+    return <Navigate to="/404" replace />;
+  }
 
   if (!offer) {
     return <Navigate to="/404" replace />;
   }
 
-  const nearestRooms = offers.filter((room) => room.id !== +id);
-  const nearestPoints = offers.map((offerItem) => offerItem.location);
+  nearestPoints.push(offer?.location);
   const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
 
   return (
@@ -139,7 +157,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
                   </p>
                 </div>
               </div>
-              <Feedbacks feedbacks={feedbacks}/>
+              <Feedbacks feedbacks={feedbacks} hotelId={id} authorizationStatus={authorizationStatus}/>
             </div>
           </div>
           <Map city={city}
@@ -155,7 +173,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
                   Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <OffersList offers={ nearestRooms.slice(0, 3) } className={classes}/>
+              <OffersList offers={ nearestRooms } className={classes}/>
             </div>
           </section>
         </div>

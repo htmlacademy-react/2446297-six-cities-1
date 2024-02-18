@@ -11,6 +11,7 @@ export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+  Comments = '/comments',
 }
 
 export const SortOptions = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
