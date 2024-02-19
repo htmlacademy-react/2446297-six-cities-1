@@ -21,11 +21,12 @@ function OfferScreen(): JSX.Element {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchRoomAction({ hotelId: id ? Number(id) : null }));
-      dispatch(fetchNearByHotelsAction({ hotelId: id ? Number(id) : null }));
-      dispatch(fetchCommentsAction({ hotelId: id ? Number(id) : null }));
+      const roomId = { hotelId: Number(id) };
+      dispatch(fetchRoomAction(roomId));
+      dispatch(fetchNearByHotelsAction(roomId));
+      dispatch(fetchCommentsAction(roomId));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   const offer = useAppSelector((state) => state.room);
   const user = useAppSelector((state) => state.user);
@@ -46,15 +47,7 @@ function OfferScreen(): JSX.Element {
     isPremiumBlockShow: false
   };
 
-  if (!id) {
-    return <Navigate to="/404" replace />;
-  }
-
-  if (!offer && !isRoomDataLoading) {
-    return <Navigate to="/404" replace />;
-  }
-
-  if (!offer) {
+  if (!id || !offer) {
     return <Navigate to="/404" replace />;
   }
 

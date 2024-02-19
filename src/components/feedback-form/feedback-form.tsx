@@ -1,7 +1,8 @@
-import { useState, FormEvent, useRef, Fragment } from 'react';
+import { useState, FormEvent, Fragment } from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { addCommentAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { RatingValues } from '../../const';
 
 type FeedbackFormProps = {
   hotelId: string;
@@ -10,9 +11,6 @@ type FeedbackFormProps = {
 function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const isCommentDataPostingStatus = useAppSelector((state) => state.isCommentDataPostingStatus);
-  const ratingArr = [{mark: 5, text: 'perfect'}, {mark: 4, text: 'good'}, {mark: 3, text: 'not bad'}, {mark: 2, text: 'badly'}, {mark: 1, text: 'terribly'}];
-  const [ratingNumber, setRatingNumber] = useState(0);
-  const reviewRef = useRef<HTMLTextAreaElement | null>(null);
   const [formData, setFormData] = useState({
     rating: 0,
     review: '',
@@ -20,23 +18,17 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
 
   const fieldChangeHandler = (evt: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const {name, value} = evt.target;
-    if (name === 'rating') {
-      setRatingNumber(Number(value));
-    }
     setFormData({ ...formData, [name]: (name === 'rating') ? +value : value });
   };
 
   const onSubmit = () => {
-    if (formData.rating > 0 && formData.review !== '') {
-      dispatch(addCommentAction({hotelId: Number(hotelId), feedback: {comment: formData.review, rating: formData.rating}}));
-      setFormData({rating: 0, review: ''});
-      setRatingNumber(0);
-    }
+    dispatch(addCommentAction({hotelId: Number(hotelId), feedback: {comment: formData.review, rating: formData.rating}}));
+    setFormData({rating: 0, review: ''});
   };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    if (reviewRef.current !== null && ratingNumber > 0) {
+    if (formData.review !== '' && formData.rating > 0) {
       onSubmit();
     }
   };
@@ -47,7 +39,7 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
         Your review
       </label>
       <div className="reviews__rating-form form__rating">
-        {ratingArr.map((rating) => (
+        {RatingValues.map((rating) => (
           <Fragment key={rating.mark}>
             <input
               className="form__rating-input visually-hidden"
@@ -56,7 +48,7 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
               id={`${rating.mark}-star${rating.mark > 1 ? 's' : ''}`}
               onChange={fieldChangeHandler}
               type="radio"
-              checked={ratingNumber === rating.mark}
+              checked={formData.rating === rating.mark}
               disabled={isCommentDataPostingStatus}
             />
             <label
@@ -76,7 +68,6 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
         id="review"
         value={formData.review}
         name="review"
-        ref={reviewRef}
         onChange={fieldChangeHandler}
         placeholder="Tell how was your stay, what you like and what can be improved"
         disabled={isCommentDataPostingStatus}
@@ -91,7 +82,7 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formData.rating === 0 || formData.review === '' || isCommentDataPostingStatus}
+          disabled={formData.rating === 0 || formData.review === '' || formData.review.length < 50 || formData.review.length > 300 || isCommentDataPostingStatus}
         >
           Submit
         </button>

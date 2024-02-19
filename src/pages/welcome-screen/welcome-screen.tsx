@@ -9,7 +9,9 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { changeCity, setOffersList, setSortedOffersList } from '../../store/action';
 import { CITIES } from '../../const';
 import SortingOptions from '../../components/sorting-options/sorting-options';
-
+import { fetchOffersAction } from '../../store/api-actions';
+import { store } from '../../store';
+store.dispatch(fetchOffersAction());
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
