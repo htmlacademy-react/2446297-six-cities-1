@@ -10,8 +10,7 @@ import { changeCity, setOffersList, setSortedOffersList } from '../../store/acti
 import { CITIES } from '../../const';
 import SortingOptions from '../../components/sorting-options/sorting-options';
 import { fetchOffersAction } from '../../store/api-actions';
-import { store } from '../../store';
-store.dispatch(fetchOffersAction());
+//import { store } from '../../store';
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -30,6 +29,12 @@ function WelcomeScreen(): JSX.Element {
   useEffect(() => {
     setSortingOption('Popular');
   }, [city]);
+
+  useEffect(() => {
+    if (city && offers.length === 0) {
+      dispatch(fetchOffersAction());
+    }
+  }, [city, offers, dispatch]);
 
 
   const classes = {

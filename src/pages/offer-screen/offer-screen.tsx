@@ -21,7 +21,7 @@ function OfferScreen(): JSX.Element {
 
   useEffect(() => {
     if (id) {
-      const roomId = { hotelId: Number(id) };
+      const roomId = Number(id);
       dispatch(fetchRoomAction(roomId));
       dispatch(fetchNearByHotelsAction(roomId));
       dispatch(fetchCommentsAction(roomId));
