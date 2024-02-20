@@ -1,15 +1,17 @@
 import {Link} from 'react-router-dom';
+import { memo } from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { UserData } from '../../types/user-data';
 
 type HeaderProps = {
-  authorizationStatus: AuthorizationStatus;
-  user: UserData | null;
+  authorizationStatus?: AuthorizationStatus;
+  user?: UserData | null;
 }
 
-function Header({authorizationStatus, user }: HeaderProps): JSX.Element {
+function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
+  console.log('Header');
   const dispatch = useAppDispatch();
   return (
     <header className="header">
@@ -26,9 +28,11 @@ function Header({authorizationStatus, user }: HeaderProps): JSX.Element {
               />
             </Link>
           </div>
-          <nav className="header__nav">
-            <ul className="header__nav-list">
-              {authorizationStatus === AuthorizationStatus.NoAuth &&
+
+          {window.location.pathname !== AppRoute.Login &&
+            <nav className="header__nav">
+              <ul className="header__nav-list">
+                {authorizationStatus === AuthorizationStatus.NoAuth &&
                   <li className="header__nav-item user">
                     <a className="header__nav-link header__nav-link--profile" href={AppRoute.Login}>
                       <div className="header__avatar-wrapper user__avatar-wrapper">
@@ -37,7 +41,7 @@ function Header({authorizationStatus, user }: HeaderProps): JSX.Element {
                     </a>
                   </li>}
 
-              {authorizationStatus === AuthorizationStatus.Auth &&
+                {authorizationStatus === AuthorizationStatus.Auth &&
                   <>
                     <li className="header__nav-item user">
                       <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
@@ -61,12 +65,13 @@ function Header({authorizationStatus, user }: HeaderProps): JSX.Element {
                       </Link>
                     </li>
                   </>}
-            </ul>
-          </nav>
+              </ul>
+            </nav>}
         </div>
       </div>
     </header>
   );
 }
 
+const Header = memo(HeaderBlock);
 export default Header;

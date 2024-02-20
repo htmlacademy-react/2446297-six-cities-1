@@ -32,9 +32,9 @@ export const fetchRoomAction = createAsyncThunk<void, { hotelId: number | null }
     dispatch(setRoomDataLoadingStatus(true));
     if (hotelId) {
       const {data} = await api.get<Offer>(`${APIRoute.Offers}/${hotelId}`);
-      dispatch(setRoomDataLoadingStatus(false));
       dispatch(loadRoom(data));
     }
+    dispatch(setRoomDataLoadingStatus(false));
   },
 );
 
@@ -48,9 +48,9 @@ export const fetchNearByHotelsAction = createAsyncThunk<void, { hotelId: number 
     dispatch(setNearByHotelsDataLoadingStatus(true));
     if (hotelId) {
       const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${hotelId}/nearby`);
-      dispatch(setNearByHotelsDataLoadingStatus(false));
       dispatch(loadNearByHotels(data));
     }
+    dispatch(setNearByHotelsDataLoadingStatus(false));
   },
 );
 
@@ -61,12 +61,12 @@ export const fetchCommentsAction = createAsyncThunk<void, { hotelId: number | nu
 }>(
   'data/fetchComments',
   async ({hotelId}, {dispatch, extra: api}) => {
+    dispatch(setCommentsDataLoadingStatus(true));
     if (hotelId) {
-      dispatch(setCommentsDataLoadingStatus(true));
       const {data} = await api.get<Feedback[]>(`${APIRoute.Comments}/${hotelId}`);
-      dispatch(setCommentsDataLoadingStatus(false));
       dispatch(loadComments(data));
     }
+    dispatch(setCommentsDataLoadingStatus(false));
   },
 );
 

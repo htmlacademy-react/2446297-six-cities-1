@@ -1,26 +1,27 @@
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
 import {Offer} from '../../types/offer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import Map from '../../components/map/map';
 import CitiesList from '../../components/cities-list/cities-list';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { changeCity, setOffersList, setSortedOffersList } from '../../store/action';
+import { changeCity, setOffersList } from '../../store/action';
 import { CITIES } from '../../const';
 import SortingOptions from '../../components/sorting-options/sorting-options';
 import { fetchOffersAction } from '../../store/api-actions';
 import { store } from '../../store';
+
 store.dispatch(fetchOffersAction());
 
 function WelcomeScreen(): JSX.Element {
+  console.log('WelcomeScreen');
   const dispatch = useAppDispatch();
   const offers = useAppSelector((state) => state.offersList);
   const city = useAppSelector((state) => state.city);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const user = useAppSelector((state) => state.user);
   const [sortingOption, setSortingOption] = useState('Popular');
-  let sortedOffersList: Offer[] = offers;
 
   useEffect(()=> {
     dispatch(changeCity(CITIES[0]));
@@ -30,7 +31,6 @@ function WelcomeScreen(): JSX.Element {
   useEffect(() => {
     setSortingOption('Popular');
   }, [city]);
-
 
   const classes = {
     article: 'cities__card',
@@ -44,35 +44,29 @@ function WelcomeScreen(): JSX.Element {
     zoom: 10,
   });
 
-  const cardHoverHandler = (offer: Offer) => {
+  const cardHoverHandler = useCallback((offer: Offer) => {
     const {location} = offer;
     setActiveCard(location);
-  };
+  }, []);
 
   const points = offers.map((offerItem) => offerItem.location);
 
-  const sortOptionChangeHandle = (option: string) => {
-    setSortingOption(option);
-    switch(option) {
+  const sortedOffersList = useMemo(() => {
+    switch(sortingOption) {
       case 'Price: low to high':
-        sortedOffersList = [...offers].sort((a: Offer, b: Offer) => a.price - b.price);
-        break;
+        return [...offers].sort((a: Offer, b: Offer) => a.price - b.price);
       case 'Price: high to low':
-        sortedOffersList = [...offers].sort((a: Offer, b: Offer) => b.price - a.price);
-        break;
+        return [...offers].sort((a: Offer, b: Offer) => b.price - a.price);
       case 'Top rated first':
-        sortedOffersList = [...offers].sort((a: Offer, b: Offer) => b.rating - a.rating);
-        break;
+        return [...offers].sort((a: Offer, b: Offer) => b.rating - a.rating);
       default:
-        if (city) {
-          dispatch(setOffersList(city));
-        }
-        break;
+        return offers;
     }
-    if (option !== 'Popular') {
-      dispatch(setSortedOffersList(sortedOffersList));
-    }
-  };
+  }, [sortingOption, offers]);
+
+  const sortOptionChangeHandle = useCallback((option: string) => {
+    setSortingOption(option);
+  }, []);
 
   return (
     <div className="page page--gray page--main">
@@ -89,7 +83,7 @@ function WelcomeScreen(): JSX.Element {
                 sortingOption = {sortingOption}
                 onOptionChange={sortOptionChangeHandle}
               />
-              <OffersList offers={ offers } className={classes} onMouseOver={(offer) => cardHoverHandler(offer)}/>
+              <OffersList offers={ sortedOffersList } className={classes} onMouseOver={cardHoverHandler}/>
             </section>
             <div className="cities__right-section">
               {city &&

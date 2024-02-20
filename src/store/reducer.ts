@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, setOffersList, setSortedOffersList, loadOffers, setOffersDataLoadingStatus, setNearByHotelsDataLoadingStatus, setCommentDataPostingStatus, requireAuthorization, setUserInfo, loadRoom, setRoomDataLoadingStatus, loadNearByHotels, loadComments, setCommentsDataLoadingStatus} from './action';
+import {changeCity, setOffersList, loadOffers, setOffersDataLoadingStatus, setNearByHotelsDataLoadingStatus, setCommentDataPostingStatus, requireAuthorization, setUserInfo, loadRoom, setRoomDataLoadingStatus, loadNearByHotels, loadComments, setCommentsDataLoadingStatus} from './action';
 import { Offer, City, Feedback } from '../types/offer';
 import { AuthorizationStatus } from '../const';
 import { UserData } from '../types/user-data.js';
@@ -43,9 +43,6 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOffersList, (state, action) => {
       state.offersList = state.offers.filter((offer) => offer.city.name === action.payload.name);
-    })
-    .addCase(setSortedOffersList, (state, action) => {
-      state.offersList = action.payload;
     })
     .addCase(loadOffers, (state, action) => {
       state.offers = action.payload;

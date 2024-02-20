@@ -16,7 +16,7 @@ type OffersListProps = {
 
 function OffersList(props: OffersListProps): JSX.Element {
   const { offers, className, onMouseOver } = props;
-
+  console.log('OffersList');
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => {
@@ -25,7 +25,7 @@ function OffersList(props: OffersListProps): JSX.Element {
           <CardItem
             key={keyValue}
             offer={offer}
-            onMouseOver={() => onMouseOver && onMouseOver(offer)}
+            onMouseOver={onMouseOver}
             className={className}
           />
         );

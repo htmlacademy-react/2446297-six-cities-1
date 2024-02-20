@@ -35,6 +35,7 @@ function Map({city, points, selectedPoint, className, mapHeight}: MapProps): JSX
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   const height = mapHeight ? mapHeight : '100%';
+  console.log('Map');
 
   useEffect(() => {
     if (map) {
