@@ -1,17 +1,45 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
-import { Offer, Feedback } from '../../types/offer';
-import { AppRoute } from '../../const';
+import { useParams, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { fetchRoomAction, fetchNearByHotelsAction, fetchCommentsAction } from '../../store/api-actions';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
+import Header from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import Map from '../../components/map/map';
+import Spinner from '../../components/spinner/spinner';
 
-type OfferScreenProps = {
-  offers: Offer[];
-  feedbacks: Feedback[];
-}
+function OfferScreen(): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
 
-function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
+  const isRoomDataLoading = useAppSelector((state) => state.isRoomDataLoading);
+  const isNearByHotelsDataLoading = useAppSelector((state) => state.isNearByHotelsDataLoading);
+  const isCommentsDataLoading = useAppSelector((state) => state.isCommentsDataLoading);
+
+  useEffect(() => {
+    if (id) {
+      const roomId = Number(id);
+      dispatch(fetchRoomAction(roomId));
+      dispatch(fetchNearByHotelsAction(roomId));
+      dispatch(fetchCommentsAction(roomId));
+    }
+  }, [id, dispatch]);
+
+  const offer = useAppSelector((state) => state.room);
+  const user = useAppSelector((state) => state.user);
+  const nearestRooms = useAppSelector((state) => state.nearByHotels);
+  const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
+  const feedbacks = useAppSelector((state) => state.comments);
+
+  if (isRoomDataLoading || isNearByHotelsDataLoading || isCommentsDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
+
   const classes = {
     article: 'near-places__card',
     img: 'near-places__image-wrapper',
@@ -19,57 +47,16 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
     isPremiumBlockShow: false
   };
 
-  const { id } = useParams();
-  if (!id) {
+  if (!id || !offer) {
     return <Navigate to="/404" replace />;
   }
 
-  const offer = offers.find((item) => item.id === +id);
-  if (!offer) {
-    return <Navigate to="/404" replace />;
-  }
-
-  const nearestRooms = offers.filter((room) => room.id !== +id);
-  const nearestPoints = offers.map((offerItem) => offerItem.location);
+  nearestPoints.push(offer?.location);
   const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link className="header__logo-link" to={AppRoute.Main}>
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width="81"
-                  height="41"
-                />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                          Oliver.conner@gmail.com
-                    </span>
-                    <span className="header__favorite-count">3</span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header authorizationStatus={authorizationStatus} user={user}/>
 
       <main className="page__main page__main--offer">
         <section className="offer">
@@ -163,7 +150,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
                   </p>
                 </div>
               </div>
-              <Feedbacks feedbacks={feedbacks}/>
+              <Feedbacks feedbacks={feedbacks} hotelId={id} authorizationStatus={authorizationStatus}/>
             </div>
           </div>
           <Map city={city}
@@ -179,7 +166,7 @@ function OfferScreen({offers, feedbacks}: OfferScreenProps): JSX.Element {
                   Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <OffersList offers={ nearestRooms.slice(0, 3) } className={classes}/>
+              <OffersList offers={ nearestRooms } className={classes}/>
             </div>
           </section>
         </div>

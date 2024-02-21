@@ -31,7 +31,7 @@ function useMap(mapRef: React.MutableRefObject<null>, city: City) {
         map.setView(new leaflet.LatLng(city.location.latitude, city.location.longitude), city.location.zoom);
       }
     }
-  }, [mapRef, city]);
+  }, [mapRef, city, map]);
 
   return map;
 }

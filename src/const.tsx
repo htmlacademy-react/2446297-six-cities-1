@@ -11,9 +11,12 @@ export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+  Comments = '/comments',
 }
 
 export const SortOptions = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
+
+export const RatingValues = [{mark: 5, text: 'perfect'}, {mark: 4, text: 'good'}, {mark: 3, text: 'not bad'}, {mark: 2, text: 'badly'}, {mark: 1, text: 'terribly'}];
 
 export const CITIES: City[] = [
   {

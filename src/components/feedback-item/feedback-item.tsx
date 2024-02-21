@@ -1,4 +1,5 @@
 import { Feedback } from '../../types/offer';
+import { formatDate } from '../../helper-functions';
 
 type FeedbackItemProps = {
   feedback: Feedback;
@@ -30,7 +31,7 @@ function FeedbackItem({feedback}: FeedbackItemProps): JSX.Element {
           {feedback.comment}
         </p>
         <time className="reviews__time" dateTime={feedback.date}>
-          {feedback.date}
+          {formatDate(feedback.date)}
         </time>
       </div>
     </>

@@ -1,6 +1,6 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, setOffersList, setSortedOffersList, loadOffers, setOffersDataLoadingStatus, requireAuthorization, setUserInfo} from './action';
-import { Offer, City } from '../types/offer';
+import {changeCity, setOffersList, setSortedOffersList, loadOffers, setOffersDataLoadingStatus, setNearByHotelsDataLoadingStatus, setCommentDataPostingStatus, requireAuthorization, setUserInfo, loadRoom, setRoomDataLoadingStatus, loadNearByHotels, loadComments, setCommentsDataLoadingStatus} from './action';
+import { Offer, City, Feedback } from '../types/offer';
 import { AuthorizationStatus } from '../const';
 import { UserData } from '../types/user-data.js';
 
@@ -11,6 +11,13 @@ interface State {
   isOffersDataLoading: boolean;
   authorizationStatus: AuthorizationStatus;
   user: UserData | null;
+  room: Offer | null;
+  isRoomDataLoading: boolean;
+  nearByHotels: Offer[];
+  isNearByHotelsDataLoading: boolean;
+  comments: Feedback[];
+  isCommentsDataLoading: boolean;
+  isCommentDataPostingStatus: boolean;
 }
 
 const initialState: State = {
@@ -20,6 +27,13 @@ const initialState: State = {
   isOffersDataLoading: false,
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
+  room: null,
+  isRoomDataLoading: true,
+  isNearByHotelsDataLoading: true,
+  nearByHotels: [],
+  comments: [],
+  isCommentsDataLoading: true,
+  isCommentDataPostingStatus: false,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -36,14 +50,37 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
     })
+    .addCase(loadRoom, (state, action) => {
+      if (state.room?.id !== action.payload.id) {
+        state.room = action.payload;
+      }
+    })
+    .addCase(loadNearByHotels, (state, action) => {
+      state.nearByHotels = action.payload;
+    })
+    .addCase(loadComments, (state, action) => {
+      state.comments = action.payload.sort((a, b) => b.id - a.id );
+    })
     .addCase(setOffersDataLoadingStatus, (state, action) => {
       state.isOffersDataLoading = action.payload;
+    })
+    .addCase(setNearByHotelsDataLoadingStatus, (state, action) => {
+      state.isNearByHotelsDataLoading = action.payload;
     })
     .addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
     })
     .addCase(setUserInfo, (state, action) => {
       state.user = action.payload;
+    })
+    .addCase(setRoomDataLoadingStatus, (state, action) => {
+      state.isRoomDataLoading = action.payload;
+    })
+    .addCase(setCommentsDataLoadingStatus, (state, action) => {
+      state.isCommentsDataLoading = action.payload;
+    })
+    .addCase(setCommentDataPostingStatus, (state, action) => {
+      state.isCommentDataPostingStatus = action.payload;
     });
 });
 
