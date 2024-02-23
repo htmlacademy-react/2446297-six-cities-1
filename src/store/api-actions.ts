@@ -22,13 +22,13 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
   },
 );
 
-export const fetchRoomAction = createAsyncThunk<void, { hotelId: number | null }, {
+export const fetchRoomAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchRoom',
-  async ({hotelId}, {dispatch, extra: api}) => {
+  async (hotelId, {dispatch, extra: api}) => {
     dispatch(setRoomDataLoadingStatus(true));
     if (hotelId) {
       const {data} = await api.get<Offer>(`${APIRoute.Offers}/${hotelId}`);
@@ -38,13 +38,13 @@ export const fetchRoomAction = createAsyncThunk<void, { hotelId: number | null }
   },
 );
 
-export const fetchNearByHotelsAction = createAsyncThunk<void, { hotelId: number | null }, {
+export const fetchNearByHotelsAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchNearByHotels',
-  async ({hotelId}, {dispatch, extra: api}) => {
+  async (hotelId, {dispatch, extra: api}) => {
     dispatch(setNearByHotelsDataLoadingStatus(true));
     if (hotelId) {
       const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${hotelId}/nearby`);
@@ -54,14 +54,13 @@ export const fetchNearByHotelsAction = createAsyncThunk<void, { hotelId: number 
   },
 );
 
-export const fetchCommentsAction = createAsyncThunk<void, { hotelId: number | null }, {
+export const fetchCommentsAction = createAsyncThunk<void, number, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchComments',
-  async ({hotelId}, {dispatch, extra: api}) => {
-    dispatch(setCommentsDataLoadingStatus(true));
+  async (hotelId, {dispatch, extra: api}) => {
     if (hotelId) {
       const {data} = await api.get<Feedback[]>(`${APIRoute.Comments}/${hotelId}`);
       dispatch(loadComments(data));
