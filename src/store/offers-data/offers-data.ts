@@ -53,9 +53,7 @@ export const offersData = createSlice({
         state.isRoomDataLoading = true;
       })
       .addCase(fetchRoomAction.fulfilled, (state, action) => {
-        //if (state.room?.id !== action.payload.id) {
         state.room = action.payload;
-        //}
         state.isRoomDataLoading = false;
       })
       .addCase(addCommentAction.pending, (state) => {

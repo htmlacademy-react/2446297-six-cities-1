@@ -27,6 +27,5 @@ export type OffersData = {
 
 export type OffersProcess = {
   city: City | null;
-  offersList: Offer[];
   offers: Offer[];
 };

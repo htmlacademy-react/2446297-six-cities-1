@@ -5,7 +5,6 @@ import { City } from '../../types/offer';
 
 const initialState: OffersProcess = {
   city: null,
-  offersList: [],
   offers: [],
 };
 
@@ -17,10 +16,6 @@ export const offersProcess = createSlice({
       const {city} = action.payload;
       state.city = city;
     },
-    //setOffersList: (state, action: PayloadAction<{city: City}>) => {
-    // const {city} = action.payload;
-    // state.offersList = state.offers.filter((offer) => offer.city.name === city.name);
-    //},
   },
 });
 
