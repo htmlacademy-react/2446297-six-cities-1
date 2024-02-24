@@ -11,7 +11,6 @@ type HeaderProps = {
 }
 
 function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
-  console.log('Header');
   const dispatch = useAppDispatch();
   return (
     <header className="header">
@@ -34,11 +33,11 @@ function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
               <ul className="header__nav-list">
                 {authorizationStatus === AuthorizationStatus.NoAuth &&
                   <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href={AppRoute.Login}>
+                    <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
                       <div className="header__avatar-wrapper user__avatar-wrapper">
                       </div>
                       <span className="header__login">Sign in</span>
-                    </a>
+                    </Link>
                   </li>}
 
                 {authorizationStatus === AuthorizationStatus.Auth &&
