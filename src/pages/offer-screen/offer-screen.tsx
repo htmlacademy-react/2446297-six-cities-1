@@ -10,15 +10,17 @@ import Map from '../../components/map/map';
 import Spinner from '../../components/spinner/spinner';
 import NearPlaces from '../../components/near-places/near-places';
 import HostInfo from '../../components/host-info/host-info';
+import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
+import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels } from '../../store/offers-data/selectors';
 
 function OfferScreen(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
-  const isRoomDataLoading = useAppSelector((state) => state.isRoomDataLoading);
-  const isNearByHotelsDataLoading = useAppSelector((state) => state.isNearByHotelsDataLoading);
-  const isCommentsDataLoading = useAppSelector((state) => state.isCommentsDataLoading);
+  const isRoomDataLoading = useAppSelector(getRoomDataLoadingStatus);
+  const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
+  const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
 
   useEffect(() => {
     if (id) {
@@ -29,11 +31,10 @@ function OfferScreen(): JSX.Element {
     }
   }, [id, dispatch]);
 
-  const offer = useAppSelector((state) => state.room);
-  const user = useAppSelector((state) => state.user);
-  const nearestRooms = useAppSelector((state) => state.nearByHotels);
+  const offer = useAppSelector(getRoom);
+  const user = useAppSelector(getUser);
+  const nearestRooms = useAppSelector(getNearByHotels);
   const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
-  const feedbacks = useAppSelector((state) => state.comments);
 
   if (isRoomDataLoading || isNearByHotelsDataLoading || isCommentsDataLoading) {
     return (
@@ -121,7 +122,7 @@ function OfferScreen(): JSX.Element {
                 </ul>
               </div>
               <HostInfo host={host} description={description}/>
-              <Feedbacks feedbacks={feedbacks} hotelId={id} authorizationStatus={authorizationStatus}/>
+              <Feedbacks hotelId={id} authorizationStatus={authorizationStatus}/>
             </div>
           </div>
           <Map city={city}

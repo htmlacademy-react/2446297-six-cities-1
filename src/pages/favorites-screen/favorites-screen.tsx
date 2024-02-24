@@ -2,6 +2,8 @@ import {Offer} from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
 import {useAppSelector} from '../../hooks/useAppSelector';
+import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
+
 type FavoritesScreenProps = {
   offers: Offer[];
 }
@@ -15,8 +17,8 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
     return result;
   }
 
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const user = useAppSelector((state) => state.user);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const user = useAppSelector(getUser);
   const uniqueCities = getUniqueCities(offers);
 
   const classes = {

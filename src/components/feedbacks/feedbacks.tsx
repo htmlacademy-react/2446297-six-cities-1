@@ -1,15 +1,16 @@
 import FeedbackForm from '../../components/feedback-form/feedback-form';
-import { Feedback } from '../../types/offer';
 import FeedbackItem from '../feedback-item/feedback-item';
 import { AuthorizationStatus } from '../../const';
-
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { getComments } from '../../store/offers-data/selectors';
 type FeedbacksProps = {
-  feedbacks: Feedback[];
   authorizationStatus: AuthorizationStatus;
   hotelId: string;
 }
 
-function Feedbacks({feedbacks, authorizationStatus, hotelId}: FeedbacksProps): JSX.Element {
+function Feedbacks({authorizationStatus, hotelId}: FeedbacksProps): JSX.Element {
+  const feedbacks = useAppSelector(getComments);
+
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
