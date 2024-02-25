@@ -46,7 +46,7 @@ export const offersData = createSlice({
         state.isCommentsDataLoading = true;
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
-        state.comments = action.payload.sort((a, b) => b.id - a.id );
+        state.comments = action.payload.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         state.isCommentsDataLoading = false;
       })
       .addCase(fetchRoomAction.pending, (state) => {
@@ -60,7 +60,7 @@ export const offersData = createSlice({
         state.isCommentDataPostingStatus = true;
       })
       .addCase(addCommentAction.fulfilled, (state, action) => {
-        state.comments = action.payload.sort((a, b) => b.id - a.id );
+        state.comments = action.payload.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         state.isCommentDataPostingStatus = false;
       });
   }
