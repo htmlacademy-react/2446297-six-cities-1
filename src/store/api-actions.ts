@@ -45,6 +45,32 @@ export const fetchNearByHotelsAction = createAsyncThunk<Offer[], number, {
   },
 );
 
+export const fetchFavoritePlacesAction = createAsyncThunk<Offer[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchFavoritePlaces',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<Offer[]>(APIRoute.FavoritePlaces);
+    return data;
+  },
+);
+
+export const addFavoritePlaceAction = createAsyncThunk<Offer, { hotelId: number; status: boolean }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/addFavoritePlace',
+  async ({hotelId, status}, {dispatch, extra: api}) => {
+    const statusNumber = status ? 1 : 0;
+    const {data} = await api.post<Offer>(`${APIRoute.FavoritePlaces}/${hotelId}/${statusNumber}`);
+    dispatch(fetchFavoritePlacesAction);
+    return data;
+  },
+);
+
 export const fetchCommentsAction = createAsyncThunk<Feedback[], number, {
   dispatch: AppDispatch;
   state: State;

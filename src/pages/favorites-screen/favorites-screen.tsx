@@ -1,14 +1,19 @@
+import { useEffect } from 'react';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 import {Offer} from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
 import {useAppSelector} from '../../hooks/useAppSelector';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
+import {fetchFavoritePlacesAction} from '../../store/api-actions';
+import {getFavoritePlaces} from '../../store/offers-data/selectors';
+import {getFavouriteErrorStatus} from '../../store/offers-data/selectors';
+import EmptyFavorites from '../../components/empty-favorites/empty-favorites';
 
-type FavoritesScreenProps = {
-  offers: Offer[];
-}
-
-function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
+function FavoritesScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const offers = useAppSelector(getFavoritePlaces);
+  const hasFavoritePlaceError = useAppSelector(getFavouriteErrorStatus);
   function getUniqueCities(arr: Offer[]) {
     const result: Set<string> = new Set();
     for (const str of arr) {
@@ -16,6 +21,10 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
     }
     return result;
   }
+
+  useEffect(() => {
+    dispatch(fetchFavoritePlacesAction());
+  }, [dispatch]);
 
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
@@ -29,6 +38,10 @@ function FavoritesScreen({offers}: FavoritesScreenProps): JSX.Element {
     imgWidth: '110',
     isPremiumBlockShow: false
   };
+
+  if (hasFavoritePlaceError || offers.length === 0) {
+    return <EmptyFavorites authorizationStatus={authorizationStatus} user={user}/>;
+  }
 
   return (
     <div className="page">

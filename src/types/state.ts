@@ -23,6 +23,11 @@ export type OffersData = {
   comments: Feedback[];
   isCommentsDataLoading: boolean;
   isCommentDataPostingStatus: boolean;
+  hasError: boolean;
+  favoritePlaces: Offer[];
+  isFavoritePlacesDataLoading: boolean;
+  hasFavoritePlaceError: boolean;
+  isFavoritePlacePostingStatus: boolean;
 };
 
 export type OffersProcess = {

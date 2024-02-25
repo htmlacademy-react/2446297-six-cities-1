@@ -9,10 +9,9 @@ import PrivateRoute from '../private-route';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import Spinner from '../spinner/spinner';
 import {getAuthorizationStatus, getAuthCheckedStatus} from '../../store/user-process/selectors';
-import { getOffers, getOffersDataLoadingStatus } from '../../store/offers-data/selectors';
+import { getOffersDataLoadingStatus } from '../../store/offers-data/selectors';
 
 function App(): JSX.Element {
-  const offers = useAppSelector(getOffers);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isOffersDataLoading = useAppSelector(getOffersDataLoadingStatus);
   const isAuthChecked = useAppSelector(getAuthCheckedStatus);
@@ -35,7 +34,7 @@ function App(): JSX.Element {
           path={AppRoute.Favorites}
           element={
             <PrivateRoute authorizationStatus={authorizationStatus}>
-              <FavoritesScreen offers={offers}/>
+              <FavoritesScreen />
             </PrivateRoute>
           }
         />
