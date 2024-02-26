@@ -1,7 +1,6 @@
 import CardItem from '../../components/card-item/card-item';
 import { Offer } from '../../types/offer';
 
-
 type OffersListProps = {
   offers: Offer[];
   onMouseOver?: (offerId: Offer) => void;
@@ -25,7 +24,7 @@ function OffersList(props: OffersListProps): JSX.Element {
           <CardItem
             key={keyValue}
             offer={offer}
-            onMouseOver={() => onMouseOver && onMouseOver(offer)}
+            onMouseOver={onMouseOver}
             className={className}
           />
         );

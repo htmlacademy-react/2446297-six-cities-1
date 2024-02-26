@@ -3,6 +3,7 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import { addCommentAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { RatingValues } from '../../const';
+import { getCommentDataPostingStatus } from '../../store/offers-data/selectors';
 
 type FeedbackFormProps = {
   hotelId: string;
@@ -10,7 +11,7 @@ type FeedbackFormProps = {
 
 function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const isCommentDataPostingStatus = useAppSelector((state) => state.isCommentDataPostingStatus);
+  const isCommentDataPostingStatus = useAppSelector(getCommentDataPostingStatus);
   const [formData, setFormData] = useState({
     rating: 0,
     review: '',

@@ -6,18 +6,21 @@ import { fetchRoomAction, fetchNearByHotelsAction, fetchCommentsAction } from '.
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
 import Header from '../../components/header/header';
-import OffersList from '../../components/offers-list/offers-list';
 import Map from '../../components/map/map';
 import Spinner from '../../components/spinner/spinner';
+import NearPlaces from '../../components/near-places/near-places';
+import HostInfo from '../../components/host-info/host-info';
+import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
+import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels } from '../../store/offers-data/selectors';
 
 function OfferScreen(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
-  const isRoomDataLoading = useAppSelector((state) => state.isRoomDataLoading);
-  const isNearByHotelsDataLoading = useAppSelector((state) => state.isNearByHotelsDataLoading);
-  const isCommentsDataLoading = useAppSelector((state) => state.isCommentsDataLoading);
+  const isRoomDataLoading = useAppSelector(getRoomDataLoadingStatus);
+  const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
+  const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
 
   useEffect(() => {
     if (id) {
@@ -28,24 +31,16 @@ function OfferScreen(): JSX.Element {
     }
   }, [id, dispatch]);
 
-  const offer = useAppSelector((state) => state.room);
-  const user = useAppSelector((state) => state.user);
-  const nearestRooms = useAppSelector((state) => state.nearByHotels);
+  const offer = useAppSelector(getRoom);
+  const user = useAppSelector(getUser);
+  const nearestRooms = useAppSelector(getNearByHotels);
   const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
-  const feedbacks = useAppSelector((state) => state.comments);
 
   if (isRoomDataLoading || isNearByHotelsDataLoading || isCommentsDataLoading) {
     return (
       <Spinner />
     );
   }
-
-  const classes = {
-    article: 'near-places__card',
-    img: 'near-places__image-wrapper',
-    info: '',
-    isPremiumBlockShow: false
-  };
 
   if (!id || !offer) {
     return <Navigate to="/404" replace />;
@@ -57,7 +52,6 @@ function OfferScreen(): JSX.Element {
   return (
     <div className="page">
       <Header authorizationStatus={authorizationStatus} user={user}/>
-
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
@@ -127,30 +121,8 @@ function OfferScreen(): JSX.Element {
                   })}
                 </ul>
               </div>
-              <div className="offer__host">
-                <h2 className="offer__host-title">Meet the host</h2>
-                <div className="offer__host-user user">
-                  <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img
-                      className="offer__avatar user__avatar"
-                      src={host.avatarUrl}
-                      width="74"
-                      height="74"
-                      alt="Host avatar"
-                    />
-                  </div>
-                  <span className="offer__user-name">{host.name}</span>
-                  {host.isPro ?
-                    <span className="offer__user-status">Pro</span>
-                    : null}
-                </div>
-                <div className="offer__description">
-                  <p className="offer__text">
-                    {description}
-                  </p>
-                </div>
-              </div>
-              <Feedbacks feedbacks={feedbacks} hotelId={id} authorizationStatus={authorizationStatus}/>
+              <HostInfo host={host} description={description}/>
+              <Feedbacks hotelId={id} authorizationStatus={authorizationStatus}/>
             </div>
           </div>
           <Map city={city}
@@ -161,14 +133,7 @@ function OfferScreen(): JSX.Element {
           />
         </section>
         <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">
-                  Other places in the neighbourhood
-            </h2>
-            <div className="near-places__list places__list">
-              <OffersList offers={ nearestRooms } className={classes}/>
-            </div>
-          </section>
+          <NearPlaces nearestRooms={nearestRooms}/>
         </div>
       </main>
     </div>

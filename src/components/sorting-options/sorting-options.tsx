@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { SortOptions } from '../../const';
 import { City } from '../../types/offer';
 
@@ -8,9 +8,8 @@ type SortingOptionsProps = {
   city: City | null;
 };
 
-function SortingOptions({sortingOption, onOptionChange, city}: SortingOptionsProps): JSX.Element {
+function SortingOptionsBlock({sortingOption, onOptionChange, city}: SortingOptionsProps): JSX.Element {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
-
   const sortBlockClickHandler = () => {
     setOptionsIsOpen(!optionsIsOpen);
   };
@@ -51,4 +50,5 @@ function SortingOptions({sortingOption, onOptionChange, city}: SortingOptionsPro
   );
 }
 
+const SortingOptions = memo(SortingOptionsBlock);
 export default SortingOptions;
