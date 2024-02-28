@@ -17,7 +17,7 @@ function OffersList(props: OffersListProps): JSX.Element {
   const { offers, className, onMouseOver } = props;
 
   return (
-    <div className="cities__places-list places__list tabs__content">
+    <>
       {offers.map((offer) => {
         const keyValue = offer.id;
         return (
@@ -29,7 +29,7 @@ function OffersList(props: OffersListProps): JSX.Element {
           />
         );
       })}
-    </div>
+    </>
   );
 }
 

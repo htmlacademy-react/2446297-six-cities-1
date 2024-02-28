@@ -66,7 +66,7 @@ export const addFavoritePlaceAction = createAsyncThunk<Offer, { hotelId: number;
   async ({hotelId, status}, {dispatch, extra: api}) => {
     const statusNumber = status ? 1 : 0;
     const {data} = await api.post<Offer>(`${APIRoute.FavoritePlaces}/${hotelId}/${statusNumber}`);
-    dispatch(fetchFavoritePlacesAction);
+    dispatch(fetchFavoritePlacesAction());
     return data;
   },
 );

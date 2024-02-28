@@ -34,8 +34,8 @@ function FavoritesScreen(): JSX.Element {
     article: 'favorites__card',
     img: 'favorites__image-wrapper',
     info: 'favorites__card-info',
-    imgHeight: '150',
-    imgWidth: '110',
+    imgHeight: '110',
+    imgWidth: '150',
     isPremiumBlockShow: false
   };
 

@@ -12,6 +12,8 @@ import { getOffers, getErrorStatus } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getCity } from '../../store/offers-process/selectors';
 import EmptyOffers from '../../components/empty-offers/empty-offers';
+import { fetchFavoritePlacesAction } from '../../store/api-actions';
+import { AuthorizationStatus } from '../../const';
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -30,7 +32,10 @@ function WelcomeScreen(): JSX.Element {
     if (city && offers.length === 0) {
       dispatch(fetchOffersAction());
     }
-  }, [city, offers, dispatch]);
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoritePlacesAction());
+    }
+  }, [city, offers, dispatch, authorizationStatus]);
 
   if (hasError || offers.length === 0) {
     return <EmptyOffers city={city} authorizationStatus={authorizationStatus} user={user}/>;

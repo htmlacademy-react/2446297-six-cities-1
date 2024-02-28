@@ -28,8 +28,18 @@ export const offersData = createSlice({
   reducers: {
     setOffersList: (state, action: PayloadAction<{city: City}>) => {
       const {city} = action.payload;
-      state.offersList = state.offers.filter((offer) => offer.city.name === city.name);
+      state.offersList = state.offers.map((offer) => {
+        const isFavorite = state.favoritePlaces.some((favOffer) => favOffer.id === offer.id);
+        return {
+          ...offer,
+          isFavorite: isFavorite,
+        };
+      }).filter((offer) => offer.city.name === city.name);
     },
+    setFavoritePlacesList: (state, action: PayloadAction<{city: City}>) => {
+      const {city} = action.payload;
+      state.favoritePlaces = state.favoritePlaces.filter((offer) => offer.city.name === city.name && offer.isFavorite);
+    }
   },
   extraReducers(builder) {
     builder
@@ -56,7 +66,7 @@ export const offersData = createSlice({
         state.isCommentsDataLoading = true;
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
-        state.comments = action.payload.sort((a, b) => b.id - a.id );
+        state.comments = action.payload.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         state.isCommentsDataLoading = false;
       })
       .addCase(fetchRoomAction.pending, (state) => {
@@ -70,7 +80,7 @@ export const offersData = createSlice({
         state.isCommentDataPostingStatus = true;
       })
       .addCase(addCommentAction.fulfilled, (state, action) => {
-        state.comments = action.payload.sort((a, b) => b.id - a.id );
+        state.comments = action.payload.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         state.isCommentDataPostingStatus = false;
       })
       .addCase(fetchFavoritePlacesAction.pending, (state) => {
@@ -89,11 +99,12 @@ export const offersData = createSlice({
       })
       .addCase(addFavoritePlaceAction.fulfilled, (state, action) => {
         const updatedOffer = action.payload;
-        console.log('До удаления', JSON.parse(JSON.stringify(state.favoritePlaces)));
         if (!updatedOffer.isFavorite) {
           state.favoritePlaces = state.favoritePlaces.filter((offer) => offer.id !== updatedOffer.id);
         }
-        console.log('После удаления', JSON.parse(JSON.stringify(state.favoritePlaces)));
+        else {
+          state.favoritePlaces.push(updatedOffer);
+        }
         state.offersList = state.offersList.map((offer) =>
           offer.id === updatedOffer.id ? updatedOffer : offer
         );

@@ -63,7 +63,9 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
             sortingOption = {sortingOption}
             onOptionChange={sortOptionChangeHandle}
           />
-          <OffersList offers={ sortedOffersList } className={classes} onMouseOver={cardHoverHandler}/>
+          <div className="cities__places-list places__list tabs__content">
+            <OffersList offers={ sortedOffersList } className={classes} onMouseOver={cardHoverHandler}/>
+          </div>
         </section>
         <div className="cities__right-section">
           {city &&
