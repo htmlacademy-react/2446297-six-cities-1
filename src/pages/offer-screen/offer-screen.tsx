@@ -1,5 +1,5 @@
-import { useParams, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { fetchRoomAction, fetchNearByHotelsAction, fetchCommentsAction } from '../../store/api-actions';
@@ -12,26 +12,38 @@ import NearPlaces from '../../components/near-places/near-places';
 import HostInfo from '../../components/host-info/host-info';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels } from '../../store/offers-data/selectors';
-
+import { addFavoritePlaceAction } from '../../store/api-actions';
+import { AuthorizationStatus, AppRoute } from '../../const';
+import { fetchFavoritePlacesAction } from '../../store/api-actions';
 function OfferScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const isRoomDataLoading = useAppSelector(getRoomDataLoadingStatus);
   const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
   const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
+  const offer = useAppSelector(getRoom);
+  const isFavoritePlace = offer?.isFavorite || false;
+  const [isFavorite, setIsFavorite] = useState(isFavoritePlace);
 
   useEffect(() => {
     if (id) {
       const roomId = Number(id);
+      if (authorizationStatus === AuthorizationStatus.Auth) {
+        dispatch(fetchFavoritePlacesAction());
+      }
       dispatch(fetchRoomAction(roomId));
       dispatch(fetchNearByHotelsAction(roomId));
       dispatch(fetchCommentsAction(roomId));
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, authorizationStatus]);
 
-  const offer = useAppSelector(getRoom);
+  useEffect(() => {
+    setIsFavorite(isFavoritePlace);
+  }, [isFavoritePlace]);
+
   const user = useAppSelector(getUser);
   const nearestRooms = useAppSelector(getNearByHotels);
   const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
@@ -47,7 +59,16 @@ function OfferScreen(): JSX.Element {
   }
 
   nearestPoints.push(offer?.location);
-  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
+  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location } = offer;
+
+  const addToFavoritesHandler = () => {
+    if (authorizationStatus === AuthorizationStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    }
+    dispatch(addFavoritePlaceAction({hotelId: offer.id, status: !isFavorite}));
+    setIsFavorite(!isFavorite);
+    dispatch(fetchFavoritePlacesAction());
+  };
 
   return (
     <div className="page">
@@ -81,7 +102,7 @@ function OfferScreen(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button className={`offer__bookmark-button button ${ isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={addToFavoritesHandler}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

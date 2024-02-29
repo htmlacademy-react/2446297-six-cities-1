@@ -8,7 +8,7 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { AuthorizationStatus } from '../../const';
 import { AppRoute } from '../../const';
-
+import { fetchFavoritePlacesAction } from '../../store/api-actions';
 type CardItemProps = {
   offer: Offer;
   onMouseOver?: (offerId: Offer) => void;
@@ -36,6 +36,7 @@ function CardItem(props: CardItemProps): JSX.Element {
     }
     dispatch(addFavoritePlaceAction({hotelId: offer.id, status: !isFavorite}));
     setIsFavorite(!isFavorite);
+    dispatch(fetchFavoritePlacesAction());
   };
 
   return (

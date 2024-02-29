@@ -74,6 +74,12 @@ export const offersData = createSlice({
       })
       .addCase(fetchRoomAction.fulfilled, (state, action) => {
         state.room = action.payload;
+        if (state.room !== null) {
+          const isFavorite = state.favoritePlaces.some((favOffer) => favOffer.id === action.payload.id);
+          if (isFavorite) {
+            state.room.isFavorite = true;
+          }
+        }
         state.isRoomDataLoading = false;
       })
       .addCase(addCommentAction.pending, (state) => {
