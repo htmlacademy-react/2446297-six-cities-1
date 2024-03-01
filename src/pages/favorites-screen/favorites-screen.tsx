@@ -14,6 +14,7 @@ function FavoritesScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const offers = useAppSelector(getFavoritePlaces);
   const hasFavoritePlaceError = useAppSelector(getFavouriteErrorStatus);
+
   function getUniqueCities(arr: Offer[]) {
     const result: Set<string> = new Set();
     for (const str of arr) {

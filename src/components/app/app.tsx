@@ -1,5 +1,6 @@
 import WelcomeScreen from '../../pages/welcome-screen/welcome-screen';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 import { AppRoute } from '../../const';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
@@ -9,12 +10,25 @@ import PrivateRoute from '../private-route';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import Spinner from '../spinner/spinner';
 import {getAuthorizationStatus, getAuthCheckedStatus} from '../../store/user-process/selectors';
-import { getOffersDataLoadingStatus } from '../../store/offers-data/selectors';
+import { getOffersDataLoadingStatus, getFavoritePlaces } from '../../store/offers-data/selectors';
+import { fetchFavoritePlacesAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { AuthorizationStatus } from '../../const';
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isOffersDataLoading = useAppSelector(getOffersDataLoadingStatus);
   const isAuthChecked = useAppSelector(getAuthCheckedStatus);
+  const favoritePlaces = useAppSelector(getFavoritePlaces);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!favoritePlaces.length) {
+      if (authorizationStatus === AuthorizationStatus.Auth) {
+        dispatch(fetchFavoritePlacesAction());
+      }
+    }
+  }, [authorizationStatus, favoritePlaces, dispatch]);
 
   if (!isAuthChecked || isOffersDataLoading) {
     return (

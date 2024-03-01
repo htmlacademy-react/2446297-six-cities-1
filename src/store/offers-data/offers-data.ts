@@ -28,17 +28,23 @@ export const offersData = createSlice({
   reducers: {
     setOffersList: (state, action: PayloadAction<{city: City}>) => {
       const {city} = action.payload;
-      state.offersList = state.offers.map((offer) => {
-        const isFavorite = state.favoritePlaces.some((favOffer) => favOffer.id === offer.id);
-        return {
-          ...offer,
-          isFavorite: isFavorite,
-        };
-      }).filter((offer) => offer.city.name === city.name);
+      state.offersList = state.offers.filter((offer) => offer.city.name === city.name);
     },
     setFavoritePlacesList: (state, action: PayloadAction<{city: City}>) => {
       const {city} = action.payload;
       state.favoritePlaces = state.favoritePlaces.filter((offer) => offer.city.name === city.name && offer.isFavorite);
+    },
+    resetFavoritePlaces: (state) => {
+      state.favoritePlaces = [];
+      state.offers.forEach((offer) => {
+        offer.isFavorite = false;
+      });
+      state.offersList.forEach((offer) => {
+        offer.isFavorite = false;
+      });
+      state.nearByHotels.forEach((offer) => {
+        offer.isFavorite = false;
+      });
     }
   },
   extraReducers(builder) {
@@ -74,12 +80,6 @@ export const offersData = createSlice({
       })
       .addCase(fetchRoomAction.fulfilled, (state, action) => {
         state.room = action.payload;
-        if (state.room !== null) {
-          const isFavorite = state.favoritePlaces.some((favOffer) => favOffer.id === action.payload.id);
-          if (isFavorite) {
-            state.room.isFavorite = true;
-          }
-        }
         state.isRoomDataLoading = false;
       })
       .addCase(addCommentAction.pending, (state) => {
@@ -105,13 +105,22 @@ export const offersData = createSlice({
       })
       .addCase(addFavoritePlaceAction.fulfilled, (state, action) => {
         const updatedOffer = action.payload;
+        if (state.room?.id === updatedOffer.id) {
+          state.room.isFavorite = updatedOffer.isFavorite;
+        }
         if (!updatedOffer.isFavorite) {
           state.favoritePlaces = state.favoritePlaces.filter((offer) => offer.id !== updatedOffer.id);
         }
         else {
           state.favoritePlaces.push(updatedOffer);
         }
+        state.offers = state.offers.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer
+        );
         state.offersList = state.offersList.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer
+        );
+        state.nearByHotels = state.nearByHotels.map((offer) =>
           offer.id === updatedOffer.id ? updatedOffer : offer
         );
         state.isFavoritePlacePostingStatus = false;
@@ -119,4 +128,4 @@ export const offersData = createSlice({
   }
 });
 
-export const {setOffersList} = offersData.actions;
+export const {setOffersList, resetFavoritePlaces} = offersData.actions;

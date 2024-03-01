@@ -1,14 +1,10 @@
 import { Offer } from '../../types/offer';
-import {Link, useNavigate } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import capitalizeFirstLetter from '../../helper-functions';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { addFavoritePlaceAction } from '../../store/api-actions';
-import { useState } from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { AuthorizationStatus } from '../../const';
-import { AppRoute } from '../../const';
-import { fetchFavoritePlacesAction } from '../../store/api-actions';
+import useAddToFavorites from '../../hooks/useAddToFavorites';
+
 type CardItemProps = {
   offer: Offer;
   onMouseOver?: (offerId: Offer) => void;
@@ -23,21 +19,10 @@ type CardItemProps = {
 };
 
 function CardItem(props: CardItemProps): JSX.Element {
-  const navigate = useNavigate();
   const { offer, onMouseOver, className} = props;
   const { isPremium, price, title, type, previewImage, rating, id } = offer;
-  const [isFavorite, setIsFavorite] = useState(offer.isFavorite);
-  const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-
-  const addToFavoritesHandler = () => {
-    if (authorizationStatus === AuthorizationStatus.NoAuth) {
-      navigate(AppRoute.Login);
-    }
-    dispatch(addFavoritePlaceAction({hotelId: offer.id, status: !isFavorite}));
-    setIsFavorite(!isFavorite);
-    dispatch(fetchFavoritePlacesAction());
-  };
+  const { addToFavoritesHandler } = useAddToFavorites(authorizationStatus, offer || undefined);
 
   return (
     <article className={`${className.article} place-card`} onMouseOver={() => onMouseOver && onMouseOver(offer)}>
@@ -63,7 +48,7 @@ function CardItem(props: CardItemProps): JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button button  ${ isFavorite ? 'place-card__bookmark-button--active' : ''}`} type="button" onClick={addToFavoritesHandler}>
+          <button className={`place-card__bookmark-button button  ${ offer.isFavorite ? 'place-card__bookmark-button--active' : ''}`} type="button" onClick={() => addToFavoritesHandler()}>
             <svg className="place-card__bookmark-icon " width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>

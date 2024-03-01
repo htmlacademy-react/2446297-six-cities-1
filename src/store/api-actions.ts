@@ -8,6 +8,7 @@ import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AppRoute } from '../const';
 import { AuthData } from '../types/auth-data';
 import { UserData } from '../types/user-data';
+import { resetFavoritePlaces } from './offers-data/offers-data';
 
 export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   dispatch: AppDispatch;
@@ -66,7 +67,6 @@ export const addFavoritePlaceAction = createAsyncThunk<Offer, { hotelId: number;
   async ({hotelId, status}, {extra: api}) => {
     const statusNumber = status ? 1 : 0;
     const {data} = await api.post<Offer>(`${APIRoute.FavoritePlaces}/${hotelId}/${statusNumber}`);
-    //dispatch(fetchFavoritePlacesAction());
     return data;
   },
 );
@@ -115,9 +115,10 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   extra: AxiosInstance;
 }>(
   'user/logout',
-  async (_arg, {extra: api}) => {
+  async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dropToken();
+    dispatch(resetFavoritePlaces());
   },
 );
 
