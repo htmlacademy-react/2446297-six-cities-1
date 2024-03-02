@@ -12,6 +12,7 @@ import NearPlaces from '../../components/near-places/near-places';
 import HostInfo from '../../components/host-info/host-info';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels } from '../../store/offers-data/selectors';
+import useAddToFavorites from '../../hooks/useAddToFavorites';
 
 function OfferScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -21,6 +22,8 @@ function OfferScreen(): JSX.Element {
   const isRoomDataLoading = useAppSelector(getRoomDataLoadingStatus);
   const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
   const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
+  const offer = useAppSelector(getRoom);
+  const { addToFavoritesHandler } = useAddToFavorites(authorizationStatus, offer || undefined);
 
   useEffect(() => {
     if (id) {
@@ -29,9 +32,8 @@ function OfferScreen(): JSX.Element {
       dispatch(fetchNearByHotelsAction(roomId));
       dispatch(fetchCommentsAction(roomId));
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, authorizationStatus]);
 
-  const offer = useAppSelector(getRoom);
   const user = useAppSelector(getUser);
   const nearestRooms = useAppSelector(getNearByHotels);
   const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
@@ -47,7 +49,7 @@ function OfferScreen(): JSX.Element {
   }
 
   nearestPoints.push(offer?.location);
-  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location} = offer;
+  const { bedrooms, goods, host, images, description, isPremium, maxAdults, price, rating, title, type, city, location } = offer;
 
   return (
     <div className="page">
@@ -56,7 +58,7 @@ function OfferScreen(): JSX.Element {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {images.map((img, index) => {
+              {images.slice(0, 6).map((img, index) => {
                 const keyValue = `${index}-${img}`;
                 return (
                   <div className="offer__image-wrapper" key={keyValue}>
@@ -81,7 +83,7 @@ function OfferScreen(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button className={`offer__bookmark-button button ${ offer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={() => addToFavoritesHandler()}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -90,7 +92,7 @@ function OfferScreen(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${rating * 20}%` }}></span>
+                  <span style={{ width: `${Math.floor(rating) * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{rating}</span>
@@ -141,3 +143,4 @@ function OfferScreen(): JSX.Element {
 }
 
 export default OfferScreen;
+

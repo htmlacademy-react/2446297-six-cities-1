@@ -8,9 +8,10 @@ import { changeCity } from '../../store/offers-process/offer-process';
 import { CITIES } from '../../const';
 import { fetchOffersAction } from '../../store/api-actions';
 import CititesPlaces from '../../components/cities-places/citites-places';
-import { getOffers } from '../../store/offers-data/selectors';
+import { getOffers, getErrorStatus } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getCity } from '../../store/offers-process/selectors';
+import EmptyOffers from '../../components/empty-offers/empty-offers';
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ function WelcomeScreen(): JSX.Element {
   const city = useAppSelector(getCity);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
+  const hasError = useAppSelector(getErrorStatus);
 
   useEffect(()=> {
     dispatch(changeCity({city: CITIES[0]}));
@@ -29,6 +31,10 @@ function WelcomeScreen(): JSX.Element {
       dispatch(fetchOffersAction());
     }
   }, [city, offers, dispatch]);
+
+  if (hasError || offers.length === 0) {
+    return <EmptyOffers city={city} authorizationStatus={authorizationStatus} user={user}/>;
+  }
 
   return (
     <div className="page page--gray page--main">

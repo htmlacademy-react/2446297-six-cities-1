@@ -8,6 +8,7 @@ import { saveToken, dropToken } from '../services/token';
 import { APIRoute, AppRoute } from '../const';
 import { AuthData } from '../types/auth-data';
 import { UserData } from '../types/user-data';
+import { resetFavoritePlaces } from './offers-data/offers-data';
 
 export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   dispatch: AppDispatch;
@@ -41,6 +42,31 @@ export const fetchNearByHotelsAction = createAsyncThunk<Offer[], number, {
   'data/fetchNearByHotels',
   async (hotelId, {extra: api}) => {
     const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${hotelId}/nearby`);
+    return data;
+  },
+);
+
+export const fetchFavoritePlacesAction = createAsyncThunk<Offer[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchFavoritePlaces',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<Offer[]>(APIRoute.FavoritePlaces);
+    return data;
+  },
+);
+
+export const addFavoritePlaceAction = createAsyncThunk<Offer, { hotelId: number; status: boolean }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/addFavoritePlace',
+  async ({hotelId, status}, {extra: api}) => {
+    const statusNumber = status ? 1 : 0;
+    const {data} = await api.post<Offer>(`${APIRoute.FavoritePlaces}/${hotelId}/${statusNumber}`);
     return data;
   },
 );
@@ -89,9 +115,10 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   extra: AxiosInstance;
 }>(
   'user/logout',
-  async (_arg, {extra: api}) => {
+  async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dropToken();
+    dispatch(resetFavoritePlaces());
   },
 );
 

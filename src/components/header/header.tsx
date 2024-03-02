@@ -1,9 +1,11 @@
 import {Link} from 'react-router-dom';
 import { memo } from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { UserData } from '../../types/user-data';
+import { getFavoritePlaces } from '../../store/offers-data/selectors';
 
 type HeaderProps = {
   authorizationStatus?: AuthorizationStatus;
@@ -12,6 +14,8 @@ type HeaderProps = {
 
 function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const favoritePlaces = useAppSelector(getFavoritePlaces);
+
   return (
     <header className="header">
       <div className="container">
@@ -48,7 +52,7 @@ function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
                         <span className="header__user-name user__name">
                           {user && user.email}
                         </span>
-                        <span className="header__favorite-count">3</span>
+                        <span className="header__favorite-count">{favoritePlaces.length}</span>
                       </Link>
                     </li>
                     <li className="header__nav-item">
