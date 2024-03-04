@@ -1,9 +1,10 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import LoginForm from '../../components/login-form/login-form';
 import Header from '../../components/header/header';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { CITIES } from '../../const';
 
 function LoginScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -11,6 +12,8 @@ function LoginScreen(): JSX.Element {
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return <Navigate to={AppRoute.Main} />;
   }
+
+  const randomCity = CITIES[Math.floor(Math.random() * CITIES.length)];
 
   return (
     <div className="page page--gray page--login">
@@ -23,9 +26,9 @@ function LoginScreen(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={`/?city=${randomCity.name}`}>
+                <span>{randomCity.name}</span>
+              </Link>
             </div>
           </section>
         </div>

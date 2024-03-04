@@ -28,7 +28,7 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
     zoom: 10,
   });
 
-  const cardHoverHandler = useCallback((offer: Offer) => {
+  const handleCardHover = useCallback((offer: Offer) => {
     const {location} = offer;
     setActiveCard(location);
   }, []);
@@ -48,7 +48,7 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
     }
   }, [sortingOption, offers]);
 
-  const sortOptionChangeHandle = useCallback((option: string) => {
+  const handleSortOptionChange = useCallback((option: string) => {
     setSortingOption(option);
   }, []);
 
@@ -61,10 +61,10 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
           <SortingOptions
             city={city}
             sortingOption = {sortingOption}
-            onOptionChange={sortOptionChangeHandle}
+            onOptionChange={handleSortOptionChange}
           />
           <div className="cities__places-list places__list tabs__content">
-            <OffersList offers={ sortedOffersList } className={classes} onMouseOver={cardHoverHandler}/>
+            <OffersList offers={ sortedOffersList } className={classes} onMouseOver={handleCardHover}/>
           </div>
         </section>
         <div className="cities__right-section">

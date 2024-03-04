@@ -36,7 +36,12 @@ export const createAPI = (): AxiosInstance => {
     (response) => response,
     (error: AxiosError<{error: string}>) => {
       if (error.response && shouldDisplayError(error.response)) {
-        toast.warn(error.response.data.error);
+        if (location.pathname === '/favorites' && error.response.status === StatusCodes.UNAUTHORIZED) {
+          toast.warn(error.response.data.error);
+        }
+        else if (error.response.status !== StatusCodes.UNAUTHORIZED) {
+          toast.error(error.response.data.error);
+        }
       }
       throw error;
     }

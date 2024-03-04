@@ -20,6 +20,7 @@ const initialState: OffersData = {
   hasFavoritePlaceError: false,
   favoritePlaces: [],
   isFavoritePlacePostingStatus: false,
+  hasRoomError: false,
 };
 
 export const offersData = createSlice({
@@ -68,11 +69,17 @@ export const offersData = createSlice({
         state.nearByHotels = action.payload;
         state.isNearByHotelsDataLoading = false;
       })
+      .addCase(fetchNearByHotelsAction.rejected, (state) => {
+        state.isNearByHotelsDataLoading = false;
+      })
       .addCase(fetchCommentsAction.pending, (state) => {
         state.isCommentsDataLoading = true;
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
         state.comments = action.payload.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        state.isCommentsDataLoading = false;
+      })
+      .addCase(fetchCommentsAction.rejected, (state) => {
         state.isCommentsDataLoading = false;
       })
       .addCase(fetchRoomAction.pending, (state) => {
@@ -81,6 +88,10 @@ export const offersData = createSlice({
       .addCase(fetchRoomAction.fulfilled, (state, action) => {
         state.room = action.payload;
         state.isRoomDataLoading = false;
+      })
+      .addCase(fetchRoomAction.rejected, (state) => {
+        state.isRoomDataLoading = false;
+        state.hasRoomError = true;
       })
       .addCase(addCommentAction.pending, (state) => {
         state.isCommentDataPostingStatus = true;
