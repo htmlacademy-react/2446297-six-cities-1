@@ -13,7 +13,7 @@ function LoginForm(): JSX.Element {
     dispatch(loginAction(authData));
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
     if (loginRef.current !== null && passwordRef.current !== null) {
@@ -39,7 +39,7 @@ function LoginForm(): JSX.Element {
   };
 
   return (
-    <form className="login__form form" action="#" onSubmit={handleSubmit}>
+    <form className="login__form form" action="#" onSubmit={handleFormSubmit}>
       <div className="login__input-wrapper form__input-wrapper">
         <label className="visually-hidden">E-mail</label>
         <input className="login__input form__input" type="email" name="email" placeholder="Email" ref={loginRef} id='email' required />

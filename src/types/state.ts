@@ -10,6 +10,7 @@ export type AppDispatch = typeof store.dispatch;
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
   user: UserData | null;
+  isFirstLogin: boolean;
 };
 
 export type OffersData = {
@@ -28,6 +29,7 @@ export type OffersData = {
   isFavoritePlacesDataLoading: boolean;
   hasFavoritePlaceError: boolean;
   isFavoritePlacePostingStatus: boolean;
+  hasRoomError: boolean;
 };
 
 export type OffersProcess = {

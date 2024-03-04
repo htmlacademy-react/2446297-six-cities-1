@@ -9,7 +9,7 @@ const useAddToFavorites = (authorizationStatus: AuthorizationStatus, offer: Offe
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const addToFavoritesHandler = () => {
+  const handleFavoritesAdd = () => {
     if (authorizationStatus === AuthorizationStatus.NoAuth) {
       navigate(AppRoute.Login);
       return;
@@ -23,7 +23,7 @@ const useAddToFavorites = (authorizationStatus: AuthorizationStatus, offer: Offe
     }
   };
 
-  return { addToFavoritesHandler };
+  return { handleFavoritesAdd };
 };
 
 export default useAddToFavorites;
