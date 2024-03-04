@@ -11,7 +11,7 @@ import Spinner from '../../components/spinner/spinner';
 import NearPlaces from '../../components/near-places/near-places';
 import HostInfo from '../../components/host-info/host-info';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
-import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels } from '../../store/offers-data/selectors';
+import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels, getRoomErrorStatus } from '../../store/offers-data/selectors';
 import useAddToFavorites from '../../hooks/useAddToFavorites';
 
 function OfferScreen(): JSX.Element {
@@ -23,7 +23,8 @@ function OfferScreen(): JSX.Element {
   const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
   const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
   const offer = useAppSelector(getRoom);
-  const { addToFavoritesHandler } = useAddToFavorites(authorizationStatus, offer || undefined);
+  const { handleFavoritesAdd } = useAddToFavorites(authorizationStatus, offer || undefined);
+  const hasRoomError = useAppSelector(getRoomErrorStatus);
 
   useEffect(() => {
     if (id) {
@@ -44,7 +45,7 @@ function OfferScreen(): JSX.Element {
     );
   }
 
-  if (!id || !offer) {
+  if (!id || !offer || hasRoomError) {
     return <Navigate to="/404" replace />;
   }
 
@@ -83,7 +84,7 @@ function OfferScreen(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`offer__bookmark-button button ${ offer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={() => addToFavoritesHandler()}>
+                <button className={`offer__bookmark-button button ${ offer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button" onClick={() => handleFavoritesAdd()}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -92,7 +93,7 @@ function OfferScreen(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${Math.floor(rating) * 20}%` }}></span>
+                  <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{rating}</span>

@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from 'react';
-import { SortOptions } from '../../const';
+import { SORT_OPTIONS } from '../../const';
 import { City } from '../../types/offer';
 
 type SortingOptionsProps = {
@@ -10,11 +10,12 @@ type SortingOptionsProps = {
 
 function SortingOptionsBlock({sortingOption, onOptionChange, city}: SortingOptionsProps): JSX.Element {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
-  const sortBlockClickHandler = () => {
+
+  const handleSortBlockClick = () => {
     setOptionsIsOpen(!optionsIsOpen);
   };
 
-  const sortOptionClickHandler = (option: string) => {
+  const handleSortOptionClick = (option: string) => {
     onOptionChange(option);
     setOptionsIsOpen(!optionsIsOpen);
   };
@@ -26,20 +27,20 @@ function SortingOptionsBlock({sortingOption, onOptionChange, city}: SortingOptio
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={sortBlockClickHandler}>
+      <span className="places__sorting-type" tabIndex={0} onClick={handleSortBlockClick}>
         {sortingOption}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
       <ul className={`places__options places__options--custom ${ optionsIsOpen ? 'places__options--opened' : ''}`}>
-        {SortOptions.map((option) => {
+        {SORT_OPTIONS.map((option) => {
           const keyValue = option;
           return (
             <li key={keyValue}
               className={`places__option ${ sortingOption === option ? 'places__option--active' : ''}`}
               tabIndex={0}
-              onClick={() => sortOptionClickHandler(option)}
+              onClick={() => handleSortOptionClick(option)}
             >
               {option}
             </li>

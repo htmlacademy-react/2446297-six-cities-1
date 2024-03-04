@@ -14,3 +14,4 @@ export const getCommentDataPostingStatus = (state: State): boolean => state[Name
 export const getErrorStatus = (state: State): boolean => state[NameSpace.Data].hasError;
 export const getFavoritePlaces = (state: State): Offer[] => state[NameSpace.Data].favoritePlaces;
 export const getFavouriteErrorStatus = (state: State): boolean => state[NameSpace.Data].hasFavoritePlaceError;
+export const getRoomErrorStatus = (state: State): boolean => state[NameSpace.Data].hasRoomError;

@@ -1,5 +1,6 @@
 import Header from '../../components/header/header';
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import CitiesList from '../../components/cities-list/cities-list';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -12,6 +13,7 @@ import { getOffers, getErrorStatus } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getCity } from '../../store/offers-process/selectors';
 import EmptyOffers from '../../components/empty-offers/empty-offers';
+import { City } from '../../types/offer';
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -20,14 +22,20 @@ function WelcomeScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
   const hasError = useAppSelector(getErrorStatus);
+  const [searchParams] = useSearchParams();
 
   useEffect(()=> {
-    dispatch(changeCity({city: CITIES[0]}));
-    dispatch(setOffersList({city: CITIES[0]}));
+    const selectedCity = searchParams.get('city');
+    let chosenCity: City = CITIES[0];
+    if (selectedCity) {
+      chosenCity = CITIES.find((cityItem) => cityItem.name === selectedCity) || CITIES[0];
+    }
+    dispatch(changeCity({city: chosenCity}));
+    dispatch(setOffersList({city: chosenCity}));
   }, []);
 
   useEffect(() => {
-    if (city && offers.length === 0) {
+    if (city && offers.length === 0 && !hasError) {
       dispatch(fetchOffersAction());
     }
   }, [city, offers, dispatch]);
