@@ -1,7 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { fetchRoomAction, fetchNearByHotelsAction, fetchCommentsAction } from '../../store/api-actions';
 import capitalizeFirstLetter from '../../helper-functions';
 import Feedbacks from '../../components/feedbacks/feedbacks';
@@ -11,8 +11,8 @@ import Spinner from '../../components/spinner/spinner';
 import NearPlaces from '../../components/near-places/near-places';
 import HostInfo from '../../components/host-info/host-info';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
-import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels, getRoomErrorStatus } from '../../store/offers-data/selectors';
-import useAddToFavorites from '../../hooks/useAddToFavorites';
+import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels, getRoomErrorStatus, getCommentsErrorStatus } from '../../store/offers-data/selectors';
+import useAddToFavorites from '../../hooks/use-add-to-favorites';
 
 function OfferScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -25,6 +25,8 @@ function OfferScreen(): JSX.Element {
   const offer = useAppSelector(getRoom);
   const { handleFavoritesAdd } = useAddToFavorites(authorizationStatus, offer || undefined);
   const hasRoomError = useAppSelector(getRoomErrorStatus);
+  const hasNearByError = useAppSelector(getRoomErrorStatus);
+  const hasCommentsError = useAppSelector(getCommentsErrorStatus);
 
   useEffect(() => {
     if (id) {
@@ -125,7 +127,7 @@ function OfferScreen(): JSX.Element {
                 </ul>
               </div>
               <HostInfo host={host} description={description}/>
-              <Feedbacks hotelId={id} authorizationStatus={authorizationStatus}/>
+              <Feedbacks hotelId={id} authorizationStatus={authorizationStatus} error={hasCommentsError}/>
             </div>
           </div>
           <Map city={city}
@@ -136,7 +138,7 @@ function OfferScreen(): JSX.Element {
           />
         </section>
         <div className="container">
-          <NearPlaces nearestRooms={nearestRooms}/>
+          <NearPlaces nearestRooms={nearestRooms} error={hasNearByError}/>
         </div>
       </main>
     </div>

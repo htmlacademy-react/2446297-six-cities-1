@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from './useAppDispatch';
+import { useAppDispatch } from './use-app-dispatch';
 import { addFavoritePlaceAction } from '../store/api-actions';
 import { AuthorizationStatus, AppRoute } from '../const';
 import { toast } from 'react-toastify';

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import {Offer} from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
-import {useAppSelector} from '../../hooks/useAppSelector';
+import {useAppSelector} from '../../hooks/use-app-selector';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import {fetchFavoritePlacesAction} from '../../store/api-actions';
 import {getFavoritePlaces} from '../../store/offers-data/selectors';
@@ -41,7 +41,7 @@ function FavoritesScreen(): JSX.Element {
   };
 
   if (hasFavoritePlaceError || offers.length === 0) {
-    return <EmptyFavorites authorizationStatus={authorizationStatus} user={user}/>;
+    return <EmptyFavorites authorizationStatus={authorizationStatus} user={user} error={hasFavoritePlaceError}/>;
   }
 
   return (

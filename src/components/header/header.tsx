@@ -1,7 +1,7 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import { memo } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { UserData } from '../../types/user-data';
@@ -15,6 +15,7 @@ type HeaderProps = {
 function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
   const dispatch = useAppDispatch();
   const favoritePlaces = useAppSelector(getFavoritePlaces);
+  const location = useLocation();
 
   return (
     <header className="header">
@@ -32,7 +33,7 @@ function HeaderBlock({authorizationStatus, user }: HeaderProps): JSX.Element {
             </Link>
           </div>
 
-          {window.location.pathname !== AppRoute.Login &&
+          {location.pathname !== AppRoute.Login &&
             <nav className="header__nav">
               <ul className="header__nav-list">
                 {authorizationStatus === AuthorizationStatus.NoAuth &&

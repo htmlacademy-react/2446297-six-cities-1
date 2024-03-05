@@ -5,9 +5,10 @@ import { AuthorizationStatus } from '../../const';
 type EmptyFavoritesProps = {
   authorizationStatus: AuthorizationStatus;
   user: UserData | null;
+  error: boolean;
 };
 
-function EmptyFavorites({authorizationStatus, user}: EmptyFavoritesProps): JSX.Element {
+function EmptyFavorites({authorizationStatus, user, error}: EmptyFavoritesProps): JSX.Element {
   return (
     <div className="page page--favorites-empty">
       <Header authorizationStatus={authorizationStatus} user={user}/>
@@ -17,8 +18,11 @@ function EmptyFavorites({authorizationStatus, user}: EmptyFavoritesProps): JSX.E
           <section className="favorites favorites--empty">
             <h1 className="visually-hidden">Favorites (empty)</h1>
             <div className="favorites__status-wrapper">
-              <b className="favorites__status">Nothing yet saved.</b>
-              <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              {error ? <b className="favorites__status">Error loading data</b> :
+                <>
+                  <b className="favorites__status">Nothing yet saved.</b>
+                  <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+                </>}
             </div>
           </section>
         </div>

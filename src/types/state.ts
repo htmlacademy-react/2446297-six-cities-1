@@ -30,6 +30,8 @@ export type OffersData = {
   hasFavoritePlaceError: boolean;
   isFavoritePlacePostingStatus: boolean;
   hasRoomError: boolean;
+  hasNearByError: boolean;
+  hasCommentsError: boolean;
 };
 
 export type OffersProcess = {
