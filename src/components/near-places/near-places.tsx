@@ -3,9 +3,10 @@ import { Offer } from '../../types/offer';
 
 type NearPlacesProps = {
   nearestRooms: Offer[];
+  error: boolean;
 }
 
-function NearPlaces({nearestRooms}: NearPlacesProps): JSX.Element {
+function NearPlaces({nearestRooms, error}: NearPlacesProps): JSX.Element {
   const classes = {
     article: 'near-places__card',
     img: 'near-places__image-wrapper',
@@ -17,7 +18,9 @@ function NearPlaces({nearestRooms}: NearPlacesProps): JSX.Element {
     <section className="near-places places">
       <h2 className="near-places__title">Other places in the neighbourhood</h2>
       <div className="near-places__list places__list">
-        <OffersList offers={ nearestRooms } className={classes}/>
+        {error ?
+          <b className="near-places__status">Error loading data</b> :
+          <OffersList offers={ nearestRooms } className={classes}/>}
       </div>
     </section>
   );

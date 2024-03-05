@@ -33,6 +33,14 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
     setActiveCard(location);
   }, []);
 
+  const handleCardHoverOut = useCallback(() => {
+    setActiveCard({
+      latitude: 0,
+      longitude: 0,
+      zoom: 10,
+    });
+  }, []);
+
   const points = offers.map((offerItem) => offerItem.location);
 
   const sortedOffersList = useMemo(() => {
@@ -64,7 +72,7 @@ function CititesPlaces({city, offers}: CititesPlacesProps): JSX.Element {
             onOptionChange={handleSortOptionChange}
           />
           <div className="cities__places-list places__list tabs__content">
-            <OffersList offers={ sortedOffersList } className={classes} onMouseOver={handleCardHover}/>
+            <OffersList offers={ sortedOffersList } className={classes} onMouseOver={handleCardHover} onMouseOut={handleCardHoverOut}/>
           </div>
         </section>
         <div className="cities__right-section">

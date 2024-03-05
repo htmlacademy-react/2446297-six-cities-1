@@ -2,8 +2,8 @@ import Header from '../../components/header/header';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CitiesList from '../../components/cities-list/cities-list';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { setOffersList } from '../../store/offers-data/offers-data';
 import { changeCity } from '../../store/offers-process/offer-process';
 import { CITIES } from '../../const';
@@ -41,7 +41,7 @@ function WelcomeScreen(): JSX.Element {
   }, [city, offers, dispatch]);
 
   if (hasError || offers.length === 0) {
-    return <EmptyOffers city={city} authorizationStatus={authorizationStatus} user={user}/>;
+    return <EmptyOffers city={city} error={hasError} authorizationStatus={authorizationStatus} user={user}/>;
   }
 
   return (

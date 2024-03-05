@@ -1,13 +1,14 @@
 import { Offer } from '../../types/offer';
 import {Link } from 'react-router-dom';
 import capitalizeFirstLetter from '../../helper-functions';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import useAddToFavorites from '../../hooks/useAddToFavorites';
+import useAddToFavorites from '../../hooks/use-add-to-favorites';
 
 type CardItemProps = {
   offer: Offer;
   onMouseOver?: (offerId: Offer) => void;
+  onMouseOut?: () => void;
   className: {
     article: string;
     img: string;
@@ -19,13 +20,13 @@ type CardItemProps = {
 };
 
 function CardItem(props: CardItemProps): JSX.Element {
-  const { offer, onMouseOver, className} = props;
+  const { offer, onMouseOver, className, onMouseOut} = props;
   const { isPremium, price, title, type, previewImage, rating, id } = offer;
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const { handleFavoritesAdd } = useAddToFavorites(authorizationStatus, offer || undefined);
 
   return (
-    <article className={`${className.article} place-card`} onMouseOver={() => onMouseOver && onMouseOver(offer)}>
+    <article className={`${className.article} place-card`} onMouseOver={() => onMouseOver && onMouseOver(offer)} onMouseOut={() => onMouseOut && onMouseOut()}>
       {isPremium && (className.isPremiumBlockShow === undefined || className.isPremiumBlockShow) ?
         <div className="place-card__mark">
           <span>Premium</span>

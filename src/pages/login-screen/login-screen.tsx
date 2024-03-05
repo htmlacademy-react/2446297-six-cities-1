@@ -1,5 +1,5 @@
 import { Navigate, Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import LoginForm from '../../components/login-form/login-form';
 import Header from '../../components/header/header';

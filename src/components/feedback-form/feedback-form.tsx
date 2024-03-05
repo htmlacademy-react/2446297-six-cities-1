@@ -1,7 +1,7 @@
 import { useState, FormEvent, Fragment } from 'react';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import { addCommentAction } from '../../store/api-actions';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { RATING_VALUES } from '../../const';
 import { getCommentDataPostingStatus } from '../../store/offers-data/selectors';
 

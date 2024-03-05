@@ -1,5 +1,5 @@
 import { CITIES } from '../../const';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { changeCity } from '../../store/offers-process/offer-process';
 import { setOffersList } from '../../store/offers-data/offers-data';
 import { City } from '../../types/offer';

@@ -1,5 +1,5 @@
 import { useRef, FormEvent, useState } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
 
