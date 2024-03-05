@@ -15,3 +15,5 @@ export const getErrorStatus = (state: State): boolean => state[NameSpace.Data].h
 export const getFavoritePlaces = (state: State): Offer[] => state[NameSpace.Data].favoritePlaces;
 export const getFavouriteErrorStatus = (state: State): boolean => state[NameSpace.Data].hasFavoritePlaceError;
 export const getRoomErrorStatus = (state: State): boolean => state[NameSpace.Data].hasRoomError;
+export const getNearByErrorStatus = (state: State): boolean => state[NameSpace.Data].hasNearByError;
+export const getCommentsErrorStatus = (state: State): boolean => state[NameSpace.Data].hasCommentsError;

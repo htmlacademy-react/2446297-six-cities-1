@@ -7,12 +7,12 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import OfferScreen from '../../pages/offer-screen/offer-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppSelector } from '../../hooks/use-app-selector';
 import Spinner from '../spinner/spinner';
 import {getAuthorizationStatus, getAuthCheckedStatus} from '../../store/user-process/selectors';
 import { getOffersDataLoadingStatus, getFavoritePlaces } from '../../store/offers-data/selectors';
 import { fetchFavoritePlacesAction } from '../../store/api-actions';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { AuthorizationStatus } from '../../const';
 
 function App(): JSX.Element {

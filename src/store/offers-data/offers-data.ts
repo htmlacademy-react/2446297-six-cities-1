@@ -21,6 +21,8 @@ const initialState: OffersData = {
   favoritePlaces: [],
   isFavoritePlacePostingStatus: false,
   hasRoomError: false,
+  hasNearByError: false,
+  hasCommentsError: false,
 };
 
 export const offersData = createSlice({
@@ -71,6 +73,7 @@ export const offersData = createSlice({
       })
       .addCase(fetchNearByHotelsAction.rejected, (state) => {
         state.isNearByHotelsDataLoading = false;
+        state.hasNearByError = true;
       })
       .addCase(fetchCommentsAction.pending, (state) => {
         state.isCommentsDataLoading = true;
@@ -81,6 +84,7 @@ export const offersData = createSlice({
       })
       .addCase(fetchCommentsAction.rejected, (state) => {
         state.isCommentsDataLoading = false;
+        state.hasCommentsError = true;
       })
       .addCase(fetchRoomAction.pending, (state) => {
         state.isRoomDataLoading = true;

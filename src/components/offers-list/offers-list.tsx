@@ -4,6 +4,7 @@ import { Offer } from '../../types/offer';
 type OffersListProps = {
   offers: Offer[];
   onMouseOver?: (offerId: Offer) => void;
+  onMouseOut?: () => void;
   className: {
     article: string;
     img: string;
@@ -14,7 +15,7 @@ type OffersListProps = {
 };
 
 function OffersList(props: OffersListProps): JSX.Element {
-  const { offers, className, onMouseOver } = props;
+  const { offers, className, onMouseOver, onMouseOut } = props;
 
   return (
     <>
@@ -26,6 +27,7 @@ function OffersList(props: OffersListProps): JSX.Element {
             offer={offer}
             onMouseOver={onMouseOver}
             className={className}
+            onMouseOut={onMouseOut}
           />
         );
       })}
