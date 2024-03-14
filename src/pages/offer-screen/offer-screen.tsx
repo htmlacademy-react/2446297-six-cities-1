@@ -13,12 +13,13 @@ import HostInfo from '../../components/host-info/host-info';
 import { getAuthorizationStatus, getUser } from '../../store/user-process/selectors';
 import { getRoomDataLoadingStatus, getNearByHotelsDataLoadingStatus, getCommentsDataLoadingStatus, getRoom, getNearByHotels, getRoomErrorStatus, getCommentsErrorStatus } from '../../store/offers-data/selectors';
 import useAddToFavorites from '../../hooks/use-add-to-favorites';
+import { resetIsDataLoadingParams, resetRoomErrors } from '../../store/offers-data/offers-data';
+import { MAX_COUNT_PHOTOS, MAX_COUNT_NEARBY } from '../../const';
 
 function OfferScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const { id } = useParams();
-
   const isRoomDataLoading = useAppSelector(getRoomDataLoadingStatus);
   const isNearByHotelsDataLoading = useAppSelector(getNearByHotelsDataLoadingStatus);
   const isCommentsDataLoading = useAppSelector(getCommentsDataLoadingStatus);
@@ -34,12 +35,17 @@ function OfferScreen(): JSX.Element {
       dispatch(fetchRoomAction(roomId));
       dispatch(fetchNearByHotelsAction(roomId));
       dispatch(fetchCommentsAction(roomId));
+
+      return () => {
+        dispatch(resetRoomErrors());
+        dispatch(resetIsDataLoadingParams());
+      };
     }
   }, [id, dispatch, authorizationStatus]);
 
   const user = useAppSelector(getUser);
   const nearestRooms = useAppSelector(getNearByHotels);
-  const nearestPoints = nearestRooms.map((offerItem) => offerItem.location);
+  const nearestPoints = nearestRooms.slice(0, MAX_COUNT_NEARBY).map((offerItem) => offerItem.location);
 
   if (isRoomDataLoading || isNearByHotelsDataLoading || isCommentsDataLoading) {
     return (
@@ -47,7 +53,7 @@ function OfferScreen(): JSX.Element {
     );
   }
 
-  if (!id || !offer || hasRoomError) {
+  if ((!id || !offer || hasRoomError)) {
     return <Navigate to="/404" replace />;
   }
 
@@ -61,7 +67,7 @@ function OfferScreen(): JSX.Element {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {images.slice(0, 6).map((img, index) => {
+              {images.slice(0, MAX_COUNT_PHOTOS).map((img, index) => {
                 const keyValue = `${index}-${img}`;
                 return (
                   <div className="offer__image-wrapper" key={keyValue}>

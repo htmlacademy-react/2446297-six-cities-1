@@ -3,6 +3,7 @@ import FeedbackItem from '../feedback-item/feedback-item';
 import { AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import { getComments } from '../../store/offers-data/selectors';
+import { MAX_COUNT_COMMENTS } from '../../const';
 
 type FeedbacksProps = {
   authorizationStatus: AuthorizationStatus;
@@ -20,7 +21,7 @@ function Feedbacks({authorizationStatus, hotelId, error}: FeedbacksProps): JSX.E
       </h2>
       {error ? <p className="reviews__title">Error loading data</p> :
         <ul className="reviews__list">
-          {feedbacks.slice(0, 10).map((feedback, index) => {
+          {feedbacks.slice(0, MAX_COUNT_COMMENTS).map((feedback, index) => {
             const keyFeedbackValue = `${index}-${feedback.user.avatarUrl}`;
             return (
               <li className="reviews__item" key={keyFeedbackValue}>
