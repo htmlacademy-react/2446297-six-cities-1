@@ -32,6 +32,7 @@ export type OffersData = {
   hasRoomError: boolean;
   hasNearByError: boolean;
   hasCommentsError: boolean;
+  hasAddingCommentError: boolean;
 };
 
 export type OffersProcess = {

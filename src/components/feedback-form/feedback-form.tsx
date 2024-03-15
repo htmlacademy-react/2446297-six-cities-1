@@ -1,9 +1,9 @@
-import { useState, FormEvent, Fragment } from 'react';
+import { useState, FormEvent, Fragment, useEffect } from 'react';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import { addCommentAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { RATING_VALUES } from '../../const';
-import { getCommentDataPostingStatus } from '../../store/offers-data/selectors';
+import { RATING_VALUES, CommentLength } from '../../const';
+import { getCommentDataPostingStatus, getAddingCommentErrorStatus } from '../../store/offers-data/selectors';
 
 type FeedbackFormProps = {
   hotelId: string;
@@ -12,10 +12,18 @@ type FeedbackFormProps = {
 function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const isCommentDataPostingStatus = useAppSelector(getCommentDataPostingStatus);
+  const hasAddingCommentError = useAppSelector(getAddingCommentErrorStatus);
+
   const [formData, setFormData] = useState({
     rating: 0,
     review: '',
   });
+
+  useEffect(() => {
+    if (!isCommentDataPostingStatus && !hasAddingCommentError) {
+      setFormData({ rating: 0, review: '' });
+    }
+  }, [isCommentDataPostingStatus, hasAddingCommentError]);
 
   const handleFieldChange = (evt: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const {name, value} = evt.target;
@@ -24,7 +32,6 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
 
   const onSubmit = () => {
     dispatch(addCommentAction({hotelId: Number(hotelId), feedback: {comment: formData.review, rating: formData.rating}}));
-    setFormData({rating: 0, review: ''});
   };
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
@@ -84,7 +91,7 @@ function FeedbackForm({hotelId}: FeedbackFormProps): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={formData.rating === 0 || formData.review === '' || formData.review.length < 50 || formData.review.length > 300 || isCommentDataPostingStatus}
+          disabled={formData.rating === 0 || formData.review === '' || formData.review.length < CommentLength.Min || formData.review.length > CommentLength.Max || isCommentDataPostingStatus}
         >
           Submit
         </button>

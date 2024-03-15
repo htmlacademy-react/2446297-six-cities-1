@@ -14,6 +14,7 @@ import { getAuthorizationStatus, getUser } from '../../store/user-process/select
 import { getCity } from '../../store/offers-process/selectors';
 import EmptyOffers from '../../components/empty-offers/empty-offers';
 import { City } from '../../types/offer';
+import {resetIsDataLoadingParams, resetRoomErrors} from '../../store/offers-data/offers-data';
 
 function WelcomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -32,6 +33,8 @@ function WelcomeScreen(): JSX.Element {
     }
     dispatch(changeCity({city: chosenCity}));
     dispatch(setOffersList({city: chosenCity}));
+    dispatch(resetIsDataLoadingParams());
+    dispatch(resetRoomErrors());
   }, []);
 
   useEffect(() => {
