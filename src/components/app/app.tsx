@@ -28,7 +28,7 @@ function App(): JSX.Element {
         dispatch(fetchFavoritePlacesAction());
       }
     }
-  }, [authorizationStatus, favoritePlaces.length, dispatch]);
+  }, [authorizationStatus, dispatch]);
 
   if (!isAuthChecked || isOffersDataLoading) {
     return (
